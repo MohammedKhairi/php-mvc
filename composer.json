@@ -1,0 +1,16 @@
+{
+    "name": "mohammedkhairi/php-mvc",
+    
+    "authors": [
+        {
+            "name": "MohammedKhairi",
+            "email": "87006319+MohammedKhairi@users.noreply.github.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {}
+}
