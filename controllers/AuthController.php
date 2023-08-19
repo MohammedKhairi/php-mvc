@@ -26,6 +26,7 @@ class AuthController extends Controller {
 
         }
         $this->setLayout('auth');
+        
         return $this->reander('register',['model'=>$registerModel]);
     }
 }
