@@ -4,10 +4,21 @@ require_once __DIR__.'/../vendor/autoload.php';
 use app\controllers\AuthController;
 use app\core\Application ;
 use app\controllers\SiteController ;
-
-$app=new Application(dirname(__DIR__));
 /**
- * ROUTER
+ * Config 
+ */
+$dotenv=Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
+$config['db']=[
+    'dbhost'=>$_ENV['DB_HOST'],
+    'dbn'=>$_ENV['DB_NAME'],
+    'user'=>$_ENV['DB_USER'],
+    'password'=>$_ENV['DB_PASSWORD'],
+];
+$app=new Application(dirname(__DIR__),$config);
+/**
+ * ROUTER 
  */
 $app->router->get('/',[SiteController::class,'home']);
 $app->router->get('/contact',[SiteController::class,'contact']);
