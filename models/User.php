@@ -23,7 +23,7 @@ class User extends Model{
              'firstname'      =>[self::RULE_REQUIERD],
              'lastname'       =>[self::RULE_REQUIERD],
              'email'          =>[self::RULE_REQUIERD,self::RULE_EMAIL,[self::RULE_UNIQUE,'class'=>self::class]],
-             'password'       =>[self::RULE_REQUIERD,[self::RULE_MIN,'min'=>8],[self::RULE_MAX,'max'=>24]],
+             'password'       =>[self::RULE_REQUIERD,[self::RULE_MIN,'min'=>5],[self::RULE_MAX,'max'=>24]],
              'confirmPassword'=>[self::RULE_REQUIERD,[self::RULE_MATCH,'match'=>'password']],
         ];
     }

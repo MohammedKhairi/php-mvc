@@ -1,5 +1,7 @@
 <?php 
 namespace app\controllers;
+
+use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\models\User;
@@ -17,8 +19,9 @@ class AuthController extends Controller {
             $userModel->loadData($request->getBody());
 
             if($userModel->validate() && $userModel->register()){
-                echo 'user Add Successfuly';
-                return "Success";
+                 Application::$app->session->setFlash('success','Thank You For Register');
+                 Application::$app->response->redirect('/');
+                 exit; 
             }
         }
         $this->setLayout('auth');

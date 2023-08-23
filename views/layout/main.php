@@ -1,3 +1,4 @@
+<?php use app\core\Application ;?>
 <!doctype html>
 <html lang="en">
 
@@ -43,6 +44,14 @@
         </div>
     </nav>  
     <div class="container py-2">
+
+        <!-- Message Show -->
+        <?php if(Application::$app->session->getFlash('success')):?>
+        <div class="alert alert-success">
+            <?php echo Application::$app->session->getFlash('success');?>
+        </div>
+        <?php endif;?> 
+        <!-- End Message Show -->
         {content}
     </div>
     
