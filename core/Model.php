@@ -18,6 +18,12 @@ abstract class Model {
          }
         
     }
+    public function lables():array {
+       return[];  
+    }
+    public function getLables($attribute){
+         return $this->lables()[$attribute]??$attribute; 
+    }
     abstract public function rules():array;
     public function validate() {
 
@@ -30,19 +36,20 @@ abstract class Model {
                      $ruleName=$rule[0];
                 }
                 if($ruleName==self::RULE_REQUIERD && !$value){
-                     $this->addError($attribute,self::RULE_REQUIERD);
+                     $this->addErrorForRul($attribute,self::RULE_REQUIERD);
                 }
                 if($ruleName==self::RULE_EMAIL && ! filter_var($value,FILTER_VALIDATE_EMAIL)){
-                    $this->addError($attribute,self::RULE_EMAIL);
+                    $this->addErrorForRul($attribute,self::RULE_EMAIL);
                 }
                 if($ruleName==self::RULE_MIN && strlen($value)<$rule['min']){
-                    $this->addError($attribute,self::RULE_MIN,$rule);
+                    $this->addErrorForRul($attribute,self::RULE_MIN,$rule);
                 }
                 if($ruleName==self::RULE_MAX && strlen($value)>$rule['max']){
-                    $this->addError($attribute,self::RULE_MAX,$rule);
+                    $this->addErrorForRul($attribute,self::RULE_MAX,$rule);
                 }
                 if($ruleName==self::RULE_MATCH  &&  $value !== $this->{$rule['match']}){
-                    $this->addError($attribute,self::RULE_MATCH ,$rule);
+                    $rule['match']=$this->getLables($rule['match']);
+                    $this->addErrorForRul($attribute,self::RULE_MATCH ,$rule);
                 } 
                 if($ruleName==self::RULE_UNIQUE){
                      $className=$rule['class'];
@@ -51,7 +58,7 @@ abstract class Model {
                      
                     $usr= Application::$app->db->row("SELECT * From $tableName WHERE $uniqueAttr =? ",[$value]);
                     if($usr){
-                        $this->addError($attribute,self::RULE_UNIQUE,['field'=>$attribute ]);
+                        $this->addErrorForRul($attribute,self::RULE_UNIQUE,[ 'field'=>$this->getLables($attribute)]);
                     }
                 }
 
@@ -63,8 +70,7 @@ abstract class Model {
         return empty($this->errors); 
         
     }
-
-    public function addError(string $attribute,string $rule,$params=[]){ 
+    private function addErrorForRul(string $attribute,string $rule,$params=[]){ 
         $message=$this->errorMessage()[$rule]??'';
 
         foreach ($params as $key => $value) {
@@ -72,7 +78,9 @@ abstract class Model {
         }
         $this->errors[$attribute][]= $message;
     }
-
+    public function addError(string $attribute,string $message){ 
+        $this->errors[$attribute][]= $message;
+    }  
     public function errorMessage(){
         return[
             self::RULE_REQUIERD=>"This Field is Requierd",
@@ -83,11 +91,9 @@ abstract class Model {
             self::RULE_UNIQUE=>"Record with this {field} already exits",
         ];
     }
-
     public function hasError($attribute){
          return $this->errors[$attribute]??false; 
     }
-
     public function getFirstError($attribute){
         return $this->errors[$attribute][0]??false;
     }

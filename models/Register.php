@@ -4,7 +4,7 @@ namespace app\models;
 
 use app\core\Application;
 use app\core\Model;
-class User extends Model{
+class Register extends Model{
     public $firstname='';
     public $lastname='';
     public $email='';
@@ -27,6 +27,15 @@ class User extends Model{
              'confirmPassword'=>[self::RULE_REQUIERD,[self::RULE_MATCH,'match'=>'password']],
         ];
     }
+    public function lables():array{
+        return[
+            'firstname'      =>'First Name',
+            'lastname'       =>'Last Name',
+            'email'          =>'Email',
+            'password'       =>'Password',
+            'confirmPassword'=>'Confirm  Password',
+       ];
+    }
 
     public function tableName():string{
         return $this->dbTableName;
@@ -41,9 +50,6 @@ class User extends Model{
             'created'=>time(),
         ]);
         return $last_id;
-    }
-    public function Login(){
-        return 1;
     }
 
 }

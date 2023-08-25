@@ -1,8 +1,8 @@
 <?php
 namespace app\core;
 class Request {
-
-    public function getPath() {
+    private array $routeParams =[];
+    public function getUrl() {
         
          $path=$_SERVER['REQUEST_URI']??'';
          $postion=strpos($path,'?');
@@ -13,14 +13,14 @@ class Request {
          $path=substr($path,0,$postion);
         return $path;
     }
-    public function method() {
+    public function getMethod() {
         return strtolower($_SERVER['REQUEST_METHOD']); 
     }
     public function isGet(){
-        return $this->method() ==='get';
+        return $this->getMethod() ==='get';
     }
     public function isPost(){
-        return $this->method() ==='post';
+        return $this->getMethod() ==='post';
     }
     public function getBody () {
         $body=[]; 
@@ -36,6 +36,14 @@ class Request {
             }
         }
         return $body;
+    }
+    public function setRouteParams($params){
+
+        $this->routeParams=$params; 
+        return $this; 
+    }
+    public function getRouteParams(){
+        return $this->routeParams; 
     }
 
 }
