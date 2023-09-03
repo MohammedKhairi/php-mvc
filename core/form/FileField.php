@@ -9,9 +9,11 @@ class FileField extends BaseField {
      public const TYPE_VIDEO='video/*';
      public const TYPE_IMAGE='image/*'; 
      public string $type ;
+     public string $multi ;
 
-     public function __construct(Model $model,string $attribute) {
+     public function __construct(Model $model,string $attribute,bool $multi) {
         $this->type = self::TYPE_IMAGE;
+        $this->multi = $multi?' multiple ':'';
         parent::__construct($model,$attribute);
      }
 
@@ -29,13 +31,14 @@ class FileField extends BaseField {
       return $this; 
      }
      public function ReanderInput():string{
-      return sprintf('<input  id="%s"  name="%s"  type="file" class="form-control %s" accept="%s">',
+      return sprintf('<input  id="%s"  name="%s"  type="file" class="form-control %s" accept="%s" %s>',
         #
         $this->attribute,
-        $this->attribute,
+        $this->attribute . (!empty($this->multi)?'[]':''),
        // $this->model->{$this->attribute},
         $this->model->hasError($this->attribute)?' error-class':'',
         $this->type,
+        $this->multi,
         #
       );
      }

@@ -19,9 +19,9 @@ $slideLinks = [
         ]
     ],
     [
-        "title" => "Post",
-        "name" => "post",
-        "slag" => "/cp/post",
+        "title" => "Artical",
+        "name" => "artical",
+        "slag" => "/cp/artical",
         "icon" => "dashboard.svg",
         "sub" => [
             ["title" => "Show", "slag" => ""],

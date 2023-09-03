@@ -8,6 +8,7 @@ use app\controllers\AuthController;
 use app\core\Application ;
 use app\controllers\SiteController ;
 use app\controllers\admin\AdminController ;
+use app\controllers\admin\ArticalController;
 use app\controllers\admin\CategoryController;
 
 /**
@@ -60,12 +61,26 @@ $app->router->get('/logout',[AuthController::class,'logout'],isAuth:true);
  * Admin Panel Links
  */
 $app->router->get(cp().'/dashboard',[AdminController::class,'dashboard'],isAuth:true);
+/**
+ * Category Pages
+ */
 $app->router->get(cp().'/category',[CategoryController::class,'get'],isAuth:true);
 $app->router->get(cp().'/category/add' ,[CategoryController::class,'add'],isAuth:true);
 $app->router->post(cp().'/category/add' ,[CategoryController::class,'add'],isAuth:true);
 $app->router->get(cp().'/category/edit/{id}',[CategoryController::class,'edit'],isAuth:true);
 $app->router->post(cp().'/category/edit/{id}',[CategoryController::class,'edit'],isAuth:true);
 $app->router->get(cp().'/category/delete/{id}',[CategoryController::class,'delete'],isAuth:true);
+/**
+ * Artical Pages
+ */
+$app->router->get(cp().'/artical',[ArticalController::class,'get'],isAuth:true);
+$app->router->get(cp().'/artical/add' ,[ArticalController::class,'add'],isAuth:true);
+$app->router->post(cp().'/artical/add' ,[ArticalController::class,'add'],isAuth:true);
+$app->router->get(cp().'/artical/edit/{id}',[ArticalController::class,'edit'],isAuth:true);
+$app->router->post(cp().'/artical/edit/{id}',[ArticalController::class,'edit'],isAuth:true);
+$app->router->get(cp().'/artical/delete/{id}',[ArticalController::class,'delete'],isAuth:true);
+$app->router->get(cp().'/artical/delete/photo/{id}',[ArticalController::class,'delete_photo'],isAuth:true);
+$app->router->get(cp().'/artical/photo/ismain/{id}/{val}',[ArticalController::class,'ismain_photo'],isAuth:true);
 
 //Run App
 $app->run();

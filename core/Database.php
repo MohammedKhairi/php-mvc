@@ -228,7 +228,7 @@ class Database
                 $updColStr .= "`{$key}`=?,";
             }
             $updColStr = substr($updColStr, 0, -1);
-            $dbQuery = "UPDATE {$tableName}
+            $dbQuery = "UPDATE `{$tableName}`
                         SET {$updColStr}";
             // where condition
             if (is_array($where)) {

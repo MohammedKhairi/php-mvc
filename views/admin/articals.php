@@ -4,30 +4,29 @@ use app\core\Application;
 ?>
 <ul class="responsive-table2 fmedium my-2">
     <li class="table-header">
-        <div class="col col-3">Title</div>
-        <div class="col col-2">Name</div>
+        <div class="col col-4">Title</div>
         <div class="col col-2">Imag</div>
-        <div class="col col-2">Nav</div>
-        <div class="col col-2">Order</div>
-        <div class="col col-1">Actions</div>
+        <div class="col col-2">Category</div>
+        <div class="col col-2">IS Show</div>
+        <div class="col col-2">Actions</div>
     </li>
     <?php
  foreach ($data as $d):?>
         <li class="table-row border-2 border-bottom">
-            <div class="col col-3" data-label="Title"><?=$d['title']?></div>
-            <div class="col col-2" data-label="Name"><?=$d['name']?></div>
+            <div class="col col-4" data-label="Title"><?=$d['title']?></div>
             <div class="col col-2" data-label="Imag">
-                <img class="w50 mh50" src="/uploads/<?=$d['img']?>" alt="" srcset="">
+                <img class="w50 mh50" src="/uploads/<?=$d['photo']?>" alt="" srcset="">
             </div>
-            <div class="col col-2" data-label="Nav"><?=$d['nav']?></div>
-            <div class="col col-2" data-label="Order"><?=$d['order']?></div>
-            <div class="col col-1" data-label="Actions">
+            <div class="col col-2" data-label="Category"><?=$d['cname']?></div>
+            
+            <div class="col col-2" data-label="IS Show"><?=$d['is_show']?></div>
+            <div class="col col-2" data-label="Actions">
                 <div class="menu-tools">
                     <div class="tools-content">
-                        <a href="/cp/category/edit/<?=$d['id']?>" class="mx-1 btn btn-sm btn-primary">Edit</a>
+                        <a href="/cp/artical/edit/<?=$d['id']?>" class="mx-1 btn btn-sm btn-primary">Edit</a>
                         <a href="" class="mx-1 btn btn-sm btn-success">Show</a>
                         <a href="" class="mx-1 btn btn-sm btn-warning">Hide</a>
-                        <buttonn onclick="DeleteBtnAlert('/cp/category/delete/<?=$d['id']?>')" class="mx-1 btn btn-sm btn-danger">Delete</buttonn>
+                        <buttonn onclick="DeleteBtnAlert('/cp/artical/delete/<?=$d['id']?>')" class="mx-1 btn btn-sm btn-danger">Delete</buttonn>
                     </div>
                 </div>
             </div>

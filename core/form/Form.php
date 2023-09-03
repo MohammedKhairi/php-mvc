@@ -26,8 +26,8 @@ class Form {
     public  function  SelectField(Model $model ,$attribute,array $options=[],string $selected=''){
         return new SelectField($model,$attribute,$options,$selected); 
     }
-    public  function  FileField(Model $model ,$attribute ){
-        return new FileField($model,$attribute); 
+    public  function  FileField(Model $model ,$attribute ,$multi=false){
+        return new FileField($model,$attribute,$multi); 
     }
     public  function  CheckedField(Model $model ,$attribute,array $options=[],string $selected=''){
         return new CheckedField($model,$attribute,$options,$selected); 

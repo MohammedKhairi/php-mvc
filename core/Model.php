@@ -10,6 +10,7 @@ abstract class Model {
     public const RULE_MATCH='match';   
     public const RULE_UNIQUE='unique';   
     public const RULE_FILE='img';   
+    public const RULE_FILES='imags';   
     
     public array $errors=[];
 
@@ -27,7 +28,7 @@ abstract class Model {
          return $this->lables()[$attribute]??$attribute; 
     }
     abstract public function rules():array;
-    public function validate() {
+    public function validate(array $Without=[]) {
 
         foreach ($this->rules() as $attribute => $rules) {
             
@@ -37,7 +38,7 @@ abstract class Model {
                 if(!is_string($ruleName)){
                      $ruleName=$rule[0];
                 }
-                if($ruleName==self::RULE_REQUIERD){
+                if(!in_array($attribute,$Without)&& $ruleName==self::RULE_REQUIERD){
                     if(is_array($value))
                     {
                         if(empty($value))
@@ -50,20 +51,20 @@ abstract class Model {
                     }
 
                 }
-                if($ruleName==self::RULE_EMAIL && ! filter_var($value,FILTER_VALIDATE_EMAIL)){
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_EMAIL && ! filter_var($value,FILTER_VALIDATE_EMAIL)){
                     $this->addErrorForRul($attribute,self::RULE_EMAIL);
                 }
-                if($ruleName==self::RULE_MIN && strlen($value)<$rule['min']){
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_MIN && strlen($value)<$rule['min']){
                     $this->addErrorForRul($attribute,self::RULE_MIN,$rule);
                 }
-                if($ruleName==self::RULE_MAX && strlen($value)>$rule['max']){
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_MAX && strlen($value)>$rule['max']){
                     $this->addErrorForRul($attribute,self::RULE_MAX,$rule);
                 }
-                if($ruleName==self::RULE_MATCH  &&  $value !== $this->{$rule['match']}){
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_MATCH  &&  $value !== $this->{$rule['match']}){
                     $rule['match']=$this->getLables($rule['match']);
                     $this->addErrorForRul($attribute,self::RULE_MATCH ,$rule);
                 } 
-                if($ruleName==self::RULE_UNIQUE){
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_UNIQUE){
                      $className=$rule['class'];
                      $uniqueAttr =$rule['attribute']??$attribute;
                      $tableName=$className::tableName();
@@ -73,7 +74,7 @@ abstract class Model {
                         $this->addErrorForRul($attribute,self::RULE_UNIQUE,[ 'field'=>$this->getLables($attribute)]);
                     }
                 }
-                if($ruleName==self::RULE_FILE)
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_FILE)
                 {
                     $image=new Image();
                     $exe=$image->getImageExtension($value['name']);
@@ -83,6 +84,22 @@ abstract class Model {
                     if(!in_array($exe,$allowExtension)){
                         $this->addErrorForRul($attribute,self::RULE_FILE,['exe'=>$allowExtensionStr]);
                     }
+
+                }
+                if(!in_array($attribute,$Without)&&$ruleName==self::RULE_FILES)
+                {
+                    $image=new Image();
+                    foreach ($value['name'] as $v) {
+                        $exe=$image->getImageExtension($v);
+                        $allowExtension=$rule['exe'];
+    
+                        $allowExtensionStr=implode(",",$allowExtension);
+                        if(!in_array($exe,$allowExtension)){
+                            $this->addErrorForRul($attribute,self::RULE_FILE,['exe'=>$allowExtensionStr]);
+                            break;
+                        }
+                    }
+                    
 
                 }
 

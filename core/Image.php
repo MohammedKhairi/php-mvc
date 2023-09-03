@@ -158,9 +158,20 @@ class Image
         imagedestroy($resizedImage);
         
         return $filename;
-        
+    }
+    public function devideMultiFiles($files):array {
+        $arr_names=$files['name'];
+        $arr_tmp_names=$files['tmp_name'];
 
+        $arr=[];
+        foreach($arr_names as $k =>$v){
+            $arr[]=[
+                "name"=>$arr_names[$k],
+                "tmp_name"=>$arr_tmp_names[$k],
+            ];
+        }
 
+        return $arr;
     }
 
 }
