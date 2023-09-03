@@ -29,12 +29,12 @@ class InputField extends BaseField {
       return $this; 
      }
      public function ReanderInput():string{
-      return sprintf('<input  id="%s"  name="%s" value ="%s" class="form-control %s" type="%s">',
+      return sprintf('<input  id="%s"  name="%s" value="%s" class="form-control %s" type="%s">',
         #
         $this->attribute,
         $this->attribute,
         $this->model->{$this->attribute},
-        $this->model->hasError($this->attribute)?' is-invalid':'',
+        $this->model->hasError($this->attribute)?' error-class':'',
         $this->type,
         #
       );

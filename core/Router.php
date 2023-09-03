@@ -79,8 +79,9 @@ class Router{
     $path=$this->request->getUrl();
     #
     $method=$this->request->getMethod();
-    
+
     $callback=$this->routes[$method][$path]??false;
+    //var_dump($this->routes[$method][$path]);exit;
      
     #Note Fond
     if(false ===$callback){
@@ -91,7 +92,6 @@ class Router{
         }
         #
     }
-    
     /**
      * check route with middleware
      * if path is not auth shoe no Permissions Page
@@ -102,6 +102,7 @@ class Router{
         if($_Auth){
             throw new ForbiddenException();
         }
+
     }
     #Only View 
     if(is_string($callback)){

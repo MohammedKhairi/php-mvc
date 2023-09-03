@@ -11,8 +11,20 @@ class Request {
              return $path;
          }
          $path=substr($path,0,$postion);
+
         return $path;
     }
+    public function getActiveUrl($is_cp=true):string {
+        
+        $path=$_SERVER['REQUEST_URI']??'';
+        $arr=explode('/',$path);
+        $a=array_filter($arr);
+        #
+        if($is_cp)
+            return $a[2]??'';
+        else
+            return $a[1]??'';
+   }
     public function getMethod() {
         return strtolower($_SERVER['REQUEST_METHOD']); 
     }
@@ -35,6 +47,13 @@ class Request {
                 $body[$key]=filter_input(INPUT_POST ,$key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
+        #
+        if(isset($_FILES)){
+            foreach ($_FILES as $key => $value) {
+                $body[$key]=$value;
+            }
+        }
+        #
         return $body;
     }
     public function setRouteParams($params){

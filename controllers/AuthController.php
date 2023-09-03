@@ -41,7 +41,8 @@ class AuthController extends Controller {
         
         return $this->reander('register',['model'=>$userModel]);
     }
-    public function logout(Response $response){
+    public function logout(){
+        $response=new Response(); 
         Application::$app->session->remove('user');
         $response->redirect('/');
     }

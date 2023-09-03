@@ -18,7 +18,7 @@ class SiteController extends Controller{
     }    
     public function contact(Request $request) {
         
-        print_r($request->getRouteParams());
+        //print_r($request->getRouteParams());
         
         $departmentsModel=new Department();
         $deps=$departmentsModel->get();

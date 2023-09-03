@@ -5,7 +5,13 @@ class View
 {
 
     public string $title = '';
-
+    public string $prev = '';
+    public function __construct($link='') {
+        $this->prev = $link;
+    }
+    public function setPrivLink($link){
+        $this->prev=$link;
+    }
     public function renderView($view, $params = [])
     {
         $this->title=$params['title']??'';
@@ -24,7 +30,7 @@ class View
             $layout = Application::$app->controller->layout;
         }
 
-        //$layout='main';
+        $title=$this->title;
         ob_start();
         include_once Application::$ROOT_DIR . '/views/layout/' . $layout . '.php';
         return ob_get_clean();
@@ -40,7 +46,7 @@ class View
         }
 
         ob_start();
-        include_once Application::$ROOT_DIR . '/views/' . $view . '.php';
+        include_once Application::$ROOT_DIR . '/views/' . $this->prev .$view . '.php';
         return ob_get_clean();
     }
 }

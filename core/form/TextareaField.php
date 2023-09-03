@@ -9,13 +9,12 @@ class TextareaField extends BaseField {
         parent::__construct($model,$attribute);
      }
      public function ReanderInput():string{
-      return sprintf('<textarea  id="%s"  name="%s" class="form-control %s">%s</textarea>',
+      return sprintf('<textarea  id="%s"  name="form-control %s" class="%s">%s</textarea>',
         #
         $this->attribute,
         $this->attribute,
-        $this->model->hasError($this->attribute)?' is-invalid':'',
+        $this->model->hasError($this->attribute)?' error-class':'',
         $this->model->{$this->attribute},
-
         #
       );
      }

@@ -23,7 +23,7 @@ class SelectField extends BaseField {
         #
         $this->attribute,
         $this->attribute,
-        $this->model->hasError($this->attribute)?' is-invalid':'',
+        $this->model->hasError($this->attribute)?' error-class':'',
         $values,
         #
       );

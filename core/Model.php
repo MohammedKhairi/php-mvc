@@ -9,6 +9,8 @@ abstract class Model {
     public const RULE_MAX='max'; 
     public const RULE_MATCH='match';   
     public const RULE_UNIQUE='unique';   
+    public const RULE_FILE='img';   
+    
     public array $errors=[];
 
     public function loadData($data) {
@@ -35,8 +37,18 @@ abstract class Model {
                 if(!is_string($ruleName)){
                      $ruleName=$rule[0];
                 }
-                if($ruleName==self::RULE_REQUIERD && !$value){
-                     $this->addErrorForRul($attribute,self::RULE_REQUIERD);
+                if($ruleName==self::RULE_REQUIERD){
+                    if(is_array($value))
+                    {
+                        if(empty($value))
+                            $this->addErrorForRul($attribute,self::RULE_REQUIERD);
+                    }
+                    else
+                    {
+                        if(""===trim($value))
+                            $this->addErrorForRul($attribute,self::RULE_REQUIERD);
+                    }
+
                 }
                 if($ruleName==self::RULE_EMAIL && ! filter_var($value,FILTER_VALIDATE_EMAIL)){
                     $this->addErrorForRul($attribute,self::RULE_EMAIL);
@@ -60,6 +72,18 @@ abstract class Model {
                     if($usr){
                         $this->addErrorForRul($attribute,self::RULE_UNIQUE,[ 'field'=>$this->getLables($attribute)]);
                     }
+                }
+                if($ruleName==self::RULE_FILE)
+                {
+                    $image=new Image();
+                    $exe=$image->getImageExtension($value['name']);
+                    $allowExtension=$rule['exe'];
+
+                    $allowExtensionStr=implode(",",$allowExtension);
+                    if(!in_array($exe,$allowExtension)){
+                        $this->addErrorForRul($attribute,self::RULE_FILE,['exe'=>$allowExtensionStr]);
+                    }
+
                 }
 
 
@@ -89,6 +113,7 @@ abstract class Model {
             self::RULE_MAX=>"Max length of this field most be {max}",
             self::RULE_MATCH=>"This Field Most be the same {match}",
             self::RULE_UNIQUE=>"Record with this {field} already exits",
+            self::RULE_FILE=>"Only File {exe} Excepted",
         ];
     }
     public function hasError($attribute){

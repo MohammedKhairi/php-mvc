@@ -225,7 +225,7 @@ class Database
             $updatePara = array();
             // Build update statement
             foreach ($params as $key => $value) {
-                $updColStr .= "{$key}=?,";
+                $updColStr .= "`{$key}`=?,";
             }
             $updColStr = substr($updColStr, 0, -1);
             $dbQuery = "UPDATE {$tableName}
@@ -234,13 +234,16 @@ class Database
             if (is_array($where)) {
                 foreach ($where as $key => $value) {
                     // Is there need to add "OR" condition?
-                    $whereStr .= "AND {$key}=?";
+                    $whereStr .= "AND `{$key}`=?";
                 }
                 $dbQuery .= " WHERE 1=1 {$whereStr}";
                 $updatePara = array_merge(array_values($params), array_values($where));
             } else {
                 $updatePara = array_values($params);
             }
+			// echo $dbQuery;
+			// print_r($updatePara);
+			// exit;
             $rowCount = $this->query($dbQuery, $updatePara);
         }
         return $rowCount;

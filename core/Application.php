@@ -21,7 +21,7 @@ class Application {
         self::$app=$this ; 
         $this->request=new Request();
         $this->response=new Response();
-        $this->session=new Session ();
+        $this->session=new Session();
         $this->view=new View();
         $this->db=new Database($config['db']);
         $this->router=new Router($this->request,$this->response);
@@ -32,6 +32,7 @@ class Application {
         } catch (\Exception $e) {
             //print_r($e);exit;
             $this->response->setStatusCode($e->getCode());
+            $this->layout='error';
             echo $this->view->renderView('_error',['exceptions'=>$e]); 
         }
     }
