@@ -38,7 +38,21 @@ $slideLinks = [
             ["title" => "ADD", "slag" => "/add"],
         ]
     ],
+    [
+        "title" => "Permission",
+        "name" => "permission",
+        "slag" => "/cp/permission",
+        "icon" => "dashboard.svg",
+        "sub" => [
+            ["title" => "Programes", "slag" => "/program"],
+            ["title" => "Actions", "slag" => "/action"],
+            ["title" => "Group", "slag" => "/group"],
+            ["title" => "Permission", "slag" => ""],
+
+        ]
+    ],
 ];
+
 ?>
 <!--  -->
 <!DOCTYPE html>

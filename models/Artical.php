@@ -24,7 +24,7 @@ class Artical extends Model{
         $this->navOption[0]="Not Show";
 
         $categoryModel=new Category();
-        $categories=$categoryModel->get();
+        $categories=$categoryModel->getAll();
         foreach ($categories as $cat) {
             $this->categories[$cat['id']]=$cat['title'];
         }

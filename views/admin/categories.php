@@ -1,7 +1,21 @@
 <?php 
 use app\core\Application;
-
 ?>
+
+<div class="d-flex justify-content-center align-content-center my-2">
+    <div class="col-md-8">
+        <form method="get">
+            <div class="d-flex align-items-center">
+                <input type="search" class="form-control" name="q" placeholder="Search here">
+                <button class="btn btn-sm bg-c-gray text-white mx-1 btn-search">
+                    <i class="icon-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+
 <ul class="responsive-table2 fmedium my-2">
     <li class="table-header">
         <div class="col col-3">Title</div>
@@ -12,7 +26,7 @@ use app\core\Application;
         <div class="col col-1">Actions</div>
     </li>
     <?php
- foreach ($data as $d):?>
+ foreach ($data['data'] as $d):?>
         <li class="table-row border-2 border-bottom">
             <div class="col col-3" data-label="Title"><?=$d['title']?></div>
             <div class="col col-2" data-label="Name"><?=$d['name']?></div>
@@ -25,8 +39,6 @@ use app\core\Application;
                 <div class="menu-tools">
                     <div class="tools-content">
                         <a href="/cp/category/edit/<?=$d['id']?>" class="mx-1 btn btn-sm btn-primary">Edit</a>
-                        <a href="" class="mx-1 btn btn-sm btn-success">Show</a>
-                        <a href="" class="mx-1 btn btn-sm btn-warning">Hide</a>
                         <buttonn onclick="DeleteBtnAlert('/cp/category/delete/<?=$d['id']?>')" class="mx-1 btn btn-sm btn-danger">Delete</buttonn>
                     </div>
                 </div>
@@ -34,13 +46,5 @@ use app\core\Application;
         </li>
     <?php endforeach;?>
 </ul>
-<ul class="pagination">
-    <li class="page-item"> <a class="page-link" href="?page=1">First</a></li>
-    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-    <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-    <li class="page-item active"><a class="page-link " href="?page=3">3</a></li>
-    <li class="page-item"><a class="page-link" href="?page=4">4</a></li>
-    <li class="page-item"><a class="page-link" href="?page=5">5</a></li>
-    <li class="page-item"> <a class="page-link" href="?page=6">Last</a></li>
-</ul>
+<?=$data['pagination']?>
 <br>

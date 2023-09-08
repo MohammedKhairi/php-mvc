@@ -16,6 +16,8 @@ class CategoryController extends Controller{
     public function get(Request $request) {
         
         $categoryModel=new Category();
+
+      // echo "<pre>";print_r($categoryModel->get()) ; echo "</pre>";exit;
         return $this->reander('categories',[
                 'title'=>'Category Page',
                 'data'=>$categoryModel->get(),

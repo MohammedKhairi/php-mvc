@@ -7,7 +7,7 @@
 <br>
 <?php echo $form->inputField($model,'order')?>
 <br>
-<button type="submit" name="$name" >
+<button type="submit" class="btn btn-primary" name="$name" >
     Submit
 </button>
 <?php echo app\core\form\Form::end();?>

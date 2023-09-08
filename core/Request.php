@@ -19,11 +19,14 @@ class Request {
         $path=$_SERVER['REQUEST_URI']??'';
         $arr=explode('/',$path);
         $a=array_filter($arr);
+        $link=$is_cp?$a[2]:$a[1];
+        if(str_contains($link,'?')){
+           $pos=strpos($link,'?');
+           return substr($link,0,$pos);
+        }
         #
-        if($is_cp)
-            return $a[2]??'';
-        else
-            return $a[1]??'';
+        return $link;
+
    }
     public function getMethod() {
         return strtolower($_SERVER['REQUEST_METHOD']); 
@@ -39,12 +42,18 @@ class Request {
 
         if($this->isGet()){
             foreach ($_GET as $key => $value) {
+                if(is_array($value))
+                    $body[$key]=$value;
+                else
                 $body[$key]=filter_input(INPUT_GET,$key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
         if($this->isPost()){
             foreach ($_POST as $key => $value) {
-                $body[$key]=filter_input(INPUT_POST ,$key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                if(is_array($value))
+                    $body[$key]=$value;
+                else
+                    $body[$key]=filter_input(INPUT_POST ,$key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
         #

@@ -75,7 +75,20 @@ class Category extends Model{
         return $last_id;
     }
     public function get(){
-        $D=Application::$app->db->query('SELECT `id`,`name`,`title`,`img`,`nav`,`order`,`deleted` From '.$this->tableName());
+        $this->setOrder();
+        $_p=$this->Pagination();
+        $D=Application::$app->db->query('SELECT `id`,`name`,`title`,`img`,`nav`,`order`,`deleted` 
+        From '.$this->tableName()
+        .(!empty($this->whr)?' where '.$this->whr:'').
+        $_p->getLimit()
+        ,$this->params);
+        $D['pagination']=$_p->drawPager($D['data_number']);
+        return $D;
+    }
+    public function getAll(){
+        $D=Application::$app->db->query('SELECT `id`,`name`,`title`,`img`,`nav`,`order`,`deleted` 
+        From '.$this->tableName().' WHERE `deleted`=0'
+        ,$this->params);
         return $D;
     }
     public function getOne($id){
@@ -93,6 +106,13 @@ class Category extends Model{
     public function remove($id){
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>time()],['id'=>$id]);
         return $last_id;
+    }
+    public function setOrder(){
+        $body=Application::$app->request->getBody();
+        if(isset($body['q']) && !empty($body['q'])){
+            $this->whr.=' `name` like ?';
+            $this->params[]='%'.strip_tags($body['q']).'%';
+        }
     }
     
 

@@ -1,5 +1,6 @@
 <?php 
 namespace app\core;
+use app\core\Pagination;
 
 abstract class Model {
 
@@ -11,10 +12,14 @@ abstract class Model {
     public const RULE_UNIQUE='unique';   
     public const RULE_FILE='img';   
     public const RULE_FILES='imags';   
-    
     public array $errors=[];
+    public $pagination;
+    public string $whr='';
+    public array $params=[];
 
+    
     public function loadData($data) {
+
          foreach ($data as $key => $value) {
              if(property_exists($this,$key ))
                 $this->{$key}=$value;
@@ -99,11 +104,7 @@ abstract class Model {
                             break;
                         }
                     }
-                    
-
                 }
-
-
             }
 
         }
@@ -138,5 +139,9 @@ abstract class Model {
     }
     public function getFirstError($attribute){
         return $this->errors[$attribute][0]??false;
+    }
+    public function Pagination(){
+        $this->pagination=new Pagination();
+        return  $this->pagination;
     }
 }
