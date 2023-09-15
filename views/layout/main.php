@@ -42,11 +42,11 @@
                 <div class="col-md-8">
                     <div class="user-menu">
                         <ul>
-                        <?php if (Application::$app->isAuth()): ?>
+                        <?php if (Application::$app->UserInfo()): ?>
                             <li>
-                                <?= Application::$app->isAuth()['fname'] ?>
+                                <?= Application::$app->UserInfo()['fname'] ?>
                                 -
-                                <?= Application::$app->isAuth()['lname'] ?>
+                                <?= Application::$app->UserInfo()['lname'] ?>
                             </li>
                             <li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
                             <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>

@@ -30,7 +30,7 @@ class PermissionController extends Controller{
 
             if($PermissionModel->validate() && $PermissionModel->insert() ){
                 Application::$app->session->setFlash('success','Permission Add Successfuly');
-                Application::$app->response->redirect('/cp/permision');
+                Application::$app->response->redirect('/cp/permission');
                 exit; 
             }
             else
@@ -59,7 +59,7 @@ class PermissionController extends Controller{
             if($PermissionModel->validate() && $PermissionModel->update($id) )
             {
                 Application::$app->session->setFlash('success','Permission Update Successfuly');
-                Application::$app->response->redirect('/cp/permision');
+                Application::$app->response->redirect('/cp/permission');
                 exit; 
             }
             else

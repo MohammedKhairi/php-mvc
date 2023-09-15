@@ -10,7 +10,7 @@ class AdminController extends Controller{
         $this->setLayout('admin');
         $this->setPrevPage('/admin');
     }
-    public function dashboard(){
+    public function get(){
         //$this->setTitle('Dashboard Page');
         return $this->reander('dashboard',['title'=>'Dashboard Page']);
     }    

@@ -40,8 +40,12 @@ class Application {
         }
     }
     public function isAuth(){
-       return $this->session->get('user');
+       return empty($this->session->get('user'))?false:true;
     }
+    public function UserInfo(){
+
+        return $this->session->get('user')??[];
+     }
 
    
 }

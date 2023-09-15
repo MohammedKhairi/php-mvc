@@ -11,7 +11,7 @@ class Pagination
      */
     public function __construct()
     {
-        $this->numPerPage =2;
+        $this->numPerPage =10;
         $this->limit_pages =3;
         $this->page =((isset($_GET['page']) && intval($_GET['page']) != 0)?$_GET['page']:1);
         $this->request =Application::$app->request;

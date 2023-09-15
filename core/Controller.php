@@ -1,7 +1,7 @@
 <?php  
  namespace app\core;
 
- class Controller{
+ class Controller{ 
     public string $layout='main';
 
     public function setLayout($layout=''){

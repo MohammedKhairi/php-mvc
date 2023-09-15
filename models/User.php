@@ -38,8 +38,9 @@ class User extends Model{
         return $this->dbTableName;
     }
     public function get(){
-        $D=Application::$app->db->row('SELECT `id`,`firstname`,`lastname`FROM '.$this->tableName().' WHERE `deleted`=0');
+        $D=Application::$app->db->query('SELECT `id`,`firstname`,`lastname`FROM '.$this->tableName().' WHERE `deleted`=0');
         return $D;
     }
+
 
 }

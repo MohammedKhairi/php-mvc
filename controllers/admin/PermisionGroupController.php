@@ -6,6 +6,7 @@ use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\models\PermisionGroup;
+use app\models\PermisionGroupAction;
 
 class PermisionGroupController extends Controller{  
     public $actionOption=[]; 
@@ -49,10 +50,11 @@ class PermisionGroupController extends Controller{
     public function edit(Request $request) {
          
         $groupModel=new PermisionGroup();
+        $groupActionModel=new PermisionGroupAction();
         $data=[];
         $id=$request->getRouteParams()['id']??0;
 
-        #Save Change
+        #Save Change 
         if($request->isPost())
         {
             $groupModel->loadData($request->getBody());
@@ -73,7 +75,9 @@ class PermisionGroupController extends Controller{
     
         if($id){
             $data=$groupModel->getOne($id);
+            $gaction=$groupActionModel->get($id);
             $groupModel->name=$data['name'];
+            $groupModel->action_id=$data=Application::$app->fun->ArrayByKey($gaction,'aid');
         }
         return $this->reander('permission-groups-set',[
                 'model'=>$groupModel,

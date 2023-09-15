@@ -46,18 +46,16 @@ class PermisionGroupAction extends Model{
         return $last_id;
     }
     public function get($group_id){
-        $D=Application::$app->db->query('SELECT `a`.`title` `atitle`  From '.$this->tableName().' `ga`
+        $D=Application::$app->db->query('SELECT `a`.`title` `atitle`,`a`.`id` `aid` From '.$this->tableName().' `ga`
         inner join `role_group` `g` on `ga`.`group_id`=`g`.`id` and `g`.`deleted`=0
         inner join `role_action` `a` on `ga`.`action_id`=`a`.`id` and `a`.`deleted`=0
-        where `ga`.`group_id`=?
+        where `g`.`id`=?
         '
         ,[$group_id]);
         return $D;
     }
     public function getOne($id){
-        $D=Application::$app->db->row('SELECT `id`,
-         `action_id`,
-        `group_id`
+        $D=Application::$app->db->row('SELECT `id`,`action_id`,`group_id`
         From '.$this->tableName().' 
         WHERE `id`=?',[$id]);
         return $D;

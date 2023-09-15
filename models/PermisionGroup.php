@@ -11,6 +11,7 @@ class PermisionGroup extends Model{
     public $action_id=[];
     public $actionNav=[];
     public $actionGroup;
+    public $groupAction;
     /**
      * Database Table Info
      */
@@ -20,6 +21,7 @@ class PermisionGroup extends Model{
     public function __construct() {
         $this->actionGroup=new PermisionGroupAction;
         $action=new PermisionAction;
+        $this->groupAction=new PermisionGroupAction;
         $this->actionNav = $action->get();
     }
     public function rules():array
@@ -41,17 +43,27 @@ class PermisionGroup extends Model{
     public function insert(){
         //var_dump([$this->action_id]);exit;
         $last_id=Application::$app->db->insert($this->dbTableName,['name'=>$this->name,'created'=>time()]);
-        $groupAction=new PermisionGroupAction;
         foreach ($this->action_id as $v) {
-            $groupAction->insert($last_id,$v);
+            $this->groupAction->insert($last_id,$v);
         }
         return $last_id;
     }
     public function update($id){
-        $last_id=Application::$app->db->update($this->dbTableName,['name' => $this->name],['id'=>$id]);
-       //$this->groupAction->update($last_id);
-        return $last_id;
-    }
+        Application::$app->db->update($this->dbTableName,['name' => $this->name],['id'=>$id]);
+        $gaction=$this->getGroupActionsById($id);
+
+        $data=[];
+        if(!empty($gaction))
+            $data=Application::$app->fun->ArrayByKey($gaction,'aid');
+        #
+        foreach ($this->action_id as $v) {
+                if(!in_array($v,$data)){
+                    $this->groupAction->insert($id,$v);
+                }
+        }
+
+        return $id;
+    } 
     public function get(){
         $D=Application::$app->db->query('SELECT `id`,`name`,`deleted` From '.$this->tableName(),$this->params);
         return $D;
@@ -65,9 +77,12 @@ class PermisionGroup extends Model{
                 "name"=>$d['name'],
                 "deleted"=>$d['deleted'],
                 "actions"=> $this->actionGroup->get($d['id']),
-            ];
+            ]; 
         }
         return $data;
+    }
+    public function getGroupActionsById($id){
+        return $this->actionGroup->get($id);
     }
     public function getOne($id){
         $D=Application::$app->db->row('SELECT `id`,`name`,`deleted` From '.$this->tableName().' WHERE `id`=?',[$id]);

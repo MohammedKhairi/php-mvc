@@ -41,6 +41,12 @@ function cp(){
     global $config;
     return $config['cpanel'];
 }
+//function for show data for programmer
+function vd($v){
+    echo "<pre>";
+    print_r($v);
+    echo "</pre>";
+}
 #
 $app=new Application(dirname(__DIR__),$config);
 /**
@@ -62,7 +68,7 @@ $app->router->get('/logout',[AuthController::class,'logout'],isAuth:true);
 /**
  * Admin Panel Links
  */
-$app->router->get(cp().'/dashboard',[AdminController::class,'dashboard'],isAuth:true);
+$app->router->get(cp().'/dashboard',[AdminController::class,'get'],isAuth:true);
 /**
  * Category Pages
  */

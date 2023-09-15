@@ -12,8 +12,6 @@ class Router{
    public  Response $response;
    public  View $view;
   
- 
-   
    public function __construct(Request $request ,Response $response) {
     $this->request=$request;
     $this->response=$response;
@@ -96,13 +94,36 @@ class Router{
      * check route with middleware
      * if path is not auth shoe no Permissions Page
      */
+
     if(in_array($path,$this->AuthRoutes)){
-        $middileware=new AuthMiddleware();
-        $_Auth=$middileware->execute();
-        if($_Auth){
+        $Authmiddileware=new AuthMiddleware();
+        $_Auth=$Authmiddileware->execute();
+        if(!$_Auth){
             throw new ForbiddenException();
         }
-
+        //
+        $links=explode('/',$path);
+        $links = array_values(array_filter($links));
+        $program=$links[1]??'';
+        /**
+         * if link <=4 mean that no section on this program 
+         *  LIKE
+         *  /program
+         *  /program/add
+         *  /program/{$}/{$}
+         * ####Else####
+         * that is section on the program so include section link to it
+         *  LIKE
+         *  /program/section
+         *  /program/section/add
+         *  /program/section/{$}/{$}
+         * 
+         */
+        $section=count($links)>4?$links[2]:'';
+        $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
+        if(!$is_Permission){
+            throw new ForbiddenException();
+        }
     }
     #Only View 
     if(is_string($callback)){
@@ -113,6 +134,7 @@ class Router{
         Application::$app->controller =new $callback[0]();
         $callback[0]=Application::$app->controller;
     }
+    
     return call_user_func($callback,$this->request,$this->response );
    }
 

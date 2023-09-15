@@ -37,7 +37,7 @@ class Request {
     public function isPost(){
         return $this->getMethod() ==='post';
     }
-    public function getBody () {
+    public function getBody (){
         $body=[]; 
 
         if($this->isGet()){
