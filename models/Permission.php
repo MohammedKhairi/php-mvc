@@ -113,7 +113,7 @@ class Permission extends Model{
         $this->params[]=$uid;
         $this->params[]=$pname;
         $this->params[]=$section;
-        $this->params[]=$action;
+        $this->params[]=$action; 
         //vd($this->whr);vd($this->params);exit;
         $D=Application::$app->db->query('SELECT `p`.`id` `pid`,`g`.`id` `gid`,`p`.`section`
         From '.$this->tableName().'`p`
