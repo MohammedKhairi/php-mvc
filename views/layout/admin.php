@@ -146,7 +146,7 @@ $slideLinks = [
                                 </ul>
                             </li>
                             <li class="p-2 ptr"><a href="/" class="txt-white"><i class="fs-5 icon-sphere"></i></a></li>
-                            <li class="p-2 ptr"><a href="/" class="txt-white"><i class="fs-5 icon-switch"></i></a></li>
+                            <li class="p-2 ptr"><a href="/logout" class="txt-white"><i class="fs-5 icon-switch"></i></a></li>
                         </ul>
                     </div>
                 </div>

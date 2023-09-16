@@ -14,6 +14,12 @@ class Request {
 
         return $path;
     }
+    public function getUrlArray() {
+        
+        $links=explode('/',$this->getUrl());
+        $links = array_values(array_filter($links));
+       return $links;
+   }
     public function getActiveUrl($is_cp=true):string {
         
         $path=$_SERVER['REQUEST_URI']??'';

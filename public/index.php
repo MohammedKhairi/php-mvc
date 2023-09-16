@@ -31,17 +31,26 @@ $config['db']=[
     'password'=>'',
 ];
 #
-$config['cpanel']='/cp';
+$config['cpanel']='cp';
 #
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 #
-function cp(){
+/**
+ * Summary of cp
+ * @return string
+ */
+function cp($root="/"){
     global $config;
-    return $config['cpanel'];
+    return $root.$config['cpanel'];
 }
 //function for show data for programmer
+/**
+ * Summary of vd
+ * @param mixed $v
+ * @return void
+ */
 function vd($v){
     echo "<pre>";
     print_r($v);
@@ -63,67 +72,67 @@ $app->router->get('/register',[AuthController::class,'register']);
 $app->router->post('/register',[AuthController::class,'register']);
 
 
-$app->router->get('/profile',[AuthController::class,'profile'],isAuth:true);
-$app->router->get('/logout',[AuthController::class,'logout'],isAuth:true);
+$app->router->get('/profile',[AuthController::class,'profile']);
+$app->router->get('/logout',[AuthController::class,'logout']);
 /**
  * Admin Panel Links
  */
-$app->router->get(cp().'/dashboard',[AdminController::class,'get'],isAuth:true);
+$app->router->get(cp().'/dashboard',[AdminController::class,'get']);
 /**
  * Category Pages
  */
-$app->router->get(cp().'/category',[CategoryController::class,'get'],isAuth:true);
-$app->router->get(cp().'/category/add' ,[CategoryController::class,'add'],isAuth:true);
-$app->router->post(cp().'/category/add' ,[CategoryController::class,'add'],isAuth:true);
-$app->router->get(cp().'/category/edit/{id}',[CategoryController::class,'edit'],isAuth:true);
-$app->router->post(cp().'/category/edit/{id}',[CategoryController::class,'edit'],isAuth:true);
-$app->router->get(cp().'/category/delete/{id}',[CategoryController::class,'delete'],isAuth:true);
+$app->router->get(cp().'/category',[CategoryController::class,'get']);
+$app->router->get(cp().'/category/add' ,[CategoryController::class,'add']);
+$app->router->post(cp().'/category/add' ,[CategoryController::class,'add']);
+$app->router->get(cp().'/category/edit/{id}',[CategoryController::class,'edit']);
+$app->router->post(cp().'/category/edit/{id}',[CategoryController::class,'edit']);
+$app->router->get(cp().'/category/delete/{id}',[CategoryController::class,'delete']);
 /**
  * Artical Pages
  */
-$app->router->get(cp().'/artical',[ArticalController::class,'get'],isAuth:true);
-$app->router->get(cp().'/artical/add' ,[ArticalController::class,'add'],isAuth:true);
-$app->router->post(cp().'/artical/add' ,[ArticalController::class,'add'],isAuth:true);
-$app->router->get(cp().'/artical/edit/{id}',[ArticalController::class,'edit'],isAuth:true);
-$app->router->post(cp().'/artical/edit/{id}',[ArticalController::class,'edit'],isAuth:true);
-$app->router->get(cp().'/artical/delete/{id}',[ArticalController::class,'delete'],isAuth:true);
-$app->router->get(cp().'/artical/delete/photo/{id}',[ArticalController::class,'delete_photo'],isAuth:true);
-$app->router->get(cp().'/artical/photo/ismain/{id}/{val}',[ArticalController::class,'ismain_photo'],isAuth:true);
+$app->router->get(cp().'/artical',[ArticalController::class,'get']);
+$app->router->get(cp().'/artical/add' ,[ArticalController::class,'add']);
+$app->router->post(cp().'/artical/add' ,[ArticalController::class,'add']);
+$app->router->get(cp().'/artical/edit/{id}',[ArticalController::class,'edit']);
+$app->router->post(cp().'/artical/edit/{id}',[ArticalController::class,'edit']);
+$app->router->get(cp().'/artical/delete/{id}',[ArticalController::class,'delete']);
+$app->router->get(cp().'/artical/delete/photo/{id}',[ArticalController::class,'delete_photo']);
+$app->router->get(cp().'/artical/photo/ismain/{id}/{val}',[ArticalController::class,'ismain_photo']);
 /**
  * Permisions Pages
  */
 //user Program
-$app->router->get(cp().'/permission/program',[PermisionProgramController::class,'get'],isAuth:true);
-$app->router->get(cp().'/permission/program/add' ,[PermisionProgramController::class,'add'],isAuth:true);
-$app->router->post(cp().'/permission/program/add' ,[PermisionProgramController::class,'add'],isAuth:true);
-$app->router->get(cp().'/permission/program/edit/{id}',[PermisionProgramController::class,'edit'],isAuth:true);
-$app->router->post(cp().'/permission/program/edit/{id}',[PermisionProgramController::class,'edit'],isAuth:true);
-$app->router->get(cp().'/permission/program/delete/{id}',[PermisionProgramController::class,'delete'],isAuth:true);
-$app->router->get(cp().'/permission/program/restore/{id}',[PermisionProgramController::class,'restore'],isAuth:true);
+$app->router->get(cp().'/permission/program',[PermisionProgramController::class,'get'],true);
+$app->router->get(cp().'/permission/program/add' ,[PermisionProgramController::class,'add'],true);
+$app->router->post(cp().'/permission/program/add' ,[PermisionProgramController::class,'add'],true);
+$app->router->get(cp().'/permission/program/edit/{id}',[PermisionProgramController::class,'edit'],true);
+$app->router->post(cp().'/permission/program/edit/{id}',[PermisionProgramController::class,'edit'],true);
+$app->router->get(cp().'/permission/program/delete/{id}',[PermisionProgramController::class,'delete'],true);
+$app->router->get(cp().'/permission/program/restore/{id}',[PermisionProgramController::class,'restore'],true);
 //user Action
-$app->router->get(cp().'/permission/action',[PermisionActionController::class,'get'],isAuth:true);
-$app->router->get(cp().'/permission/action/add' ,[PermisionActionController::class,'add'],isAuth:true);
-$app->router->post(cp().'/permission/action/add' ,[PermisionActionController::class,'add'],isAuth:true);
-$app->router->get(cp().'/permission/action/edit/{id}',[PermisionActionController::class,'edit'],isAuth:true);
-$app->router->post(cp().'/permission/action/edit/{id}',[PermisionActionController::class,'edit'],isAuth:true);
-$app->router->get(cp().'/permission/action/delete/{id}',[PermisionActionController::class,'delete'],isAuth:true);
-$app->router->get(cp().'/permission/action/restore/{id}',[PermisionActionController::class,'restore'],isAuth:true);
+$app->router->get(cp().'/permission/action',[PermisionActionController::class,'get'],true);
+$app->router->get(cp().'/permission/action/add' ,[PermisionActionController::class,'add'],true);
+$app->router->post(cp().'/permission/action/add' ,[PermisionActionController::class,'add'],true);
+$app->router->get(cp().'/permission/action/edit/{id}',[PermisionActionController::class,'edit'],true);
+$app->router->post(cp().'/permission/action/edit/{id}',[PermisionActionController::class,'edit'],true);
+$app->router->get(cp().'/permission/action/delete/{id}',[PermisionActionController::class,'delete'],true);
+$app->router->get(cp().'/permission/action/restore/{id}',[PermisionActionController::class,'restore'],true);
 //user Group
-$app->router->get(cp().'/permission/group',[PermisionGroupController::class,'get'],isAuth:true);
-$app->router->get(cp().'/permission/group/add' ,[PermisionGroupController::class,'add'],isAuth:true);
-$app->router->post(cp().'/permission/group/add' ,[PermisionGroupController::class,'add'],isAuth:true);
-$app->router->get(cp().'/permission/group/edit/{id}',[PermisionGroupController::class,'edit'],isAuth:true);
-$app->router->post(cp().'/permission/group/edit/{id}',[PermisionGroupController::class,'edit'],isAuth:true);
-$app->router->get(cp().'/permission/group/delete/{id}',[PermisionGroupController::class,'delete'],isAuth:true);
-$app->router->get(cp().'/permission/group/restore/{id}',[PermisionGroupController::class,'restore'],isAuth:true);
+$app->router->get(cp().'/permission/group',[PermisionGroupController::class,'get'],true);
+$app->router->get(cp().'/permission/group/add' ,[PermisionGroupController::class,'add'],true);
+$app->router->post(cp().'/permission/group/add' ,[PermisionGroupController::class,'add'],true);
+$app->router->get(cp().'/permission/group/edit/{id}',[PermisionGroupController::class,'edit'],true);
+$app->router->post(cp().'/permission/group/edit/{id}',[PermisionGroupController::class,'edit'],true);
+$app->router->get(cp().'/permission/group/delete/{id}',[PermisionGroupController::class,'delete'],true);
+$app->router->get(cp().'/permission/group/restore/{id}',[PermisionGroupController::class,'restore'],true);
 
 //user Permission
-$app->router->get(cp().'/permission',[PermissionController::class,'get'],isAuth:true);
-$app->router->get(cp().'/permission/add' ,[PermissionController::class,'add'],isAuth:true);
-$app->router->post(cp().'/permission/add' ,[PermissionController::class,'add'],isAuth:true);
-$app->router->get(cp().'/permission/edit/{id}',[PermissionController::class,'edit'],isAuth:true);
-$app->router->post(cp().'/permission/edit/{id}',[PermissionController::class,'edit'],isAuth:true);
-$app->router->get(cp().'/permission/delete/{id}',[PermissionController::class,'delete'],isAuth:true);
-$app->router->get(cp().'/permission/restore/{id}',[PermissionController::class,'restore'],isAuth:true);
+$app->router->get(cp().'/permission',[PermissionController::class,'get']);
+$app->router->get(cp().'/permission/add' ,[PermissionController::class,'add']);
+$app->router->post(cp().'/permission/add' ,[PermissionController::class,'add']);
+$app->router->get(cp().'/permission/edit/{id}',[PermissionController::class,'edit']);
+$app->router->post(cp().'/permission/edit/{id}',[PermissionController::class,'edit']);
+$app->router->get(cp().'/permission/delete/{id}',[PermissionController::class,'delete']);
+$app->router->get(cp().'/permission/restore/{id}',[PermissionController::class,'restore']);
 //Run App
 $app->run();

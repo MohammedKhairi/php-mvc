@@ -9,6 +9,8 @@ class Router{
    public  Request $request;
    protected array $routes=[];
    protected array $AuthRoutes=[];
+   protected array $SectionRoutes=[];
+
    public  Response $response;
    public  View $view;
   
@@ -17,17 +19,26 @@ class Router{
     $this->response=$response;
    }
    public function isAutherize($path){
+        $arr=$this->request->getUrlArray();
+        if(isset($arr[0]) && $arr[0]==cp("") )
         $this->AuthRoutes[]=$path;
    }
-   public function get($path , $callback,$isAuth=false){
-    if($isAuth)
-        $this->isAutherize($path);
+   public function isSection($path,$is_section){
+        if($is_section)
+            $this->SectionRoutes[]=$path;
+    }
+   public function get($path , $callback,bool $is_section=false){
+    $this->isAutherize($path);
+    #
+    $this->isSection($path,$is_section);
     #
     $this->routes['get'][$path]=$callback;
    }
-   public function post($path , $callback,$isAuth=false){
-    if($isAuth)
-        $this->isAutherize($path);
+   public function post($path , $callback,bool $is_section=false){
+    $this->isAutherize($path);
+    #
+    $this->isSection($path,$is_section);
+    #
     $this->routes['post'][$path]=$callback;
    }
    public function getCallback(){
@@ -94,7 +105,6 @@ class Router{
      * check route with middleware
      * if path is not auth shoe no Permissions Page
      */
-
     if(in_array($path,$this->AuthRoutes)){
         $Authmiddileware=new AuthMiddleware();
         $_Auth=$Authmiddileware->execute();
@@ -102,24 +112,13 @@ class Router{
             throw new ForbiddenException();
         }
         //
-        $links=explode('/',$path);
-        $links = array_values(array_filter($links));
+        $links=$this->request->getUrlArray();
         $program=$links[1]??'';
-        /**
-         * if link <=4 mean that no section on this program 
-         *  LIKE
-         *  /program
-         *  /program/add
-         *  /program/{$}/{$}
-         * ####Else####
-         * that is section on the program so include section link to it
-         *  LIKE
-         *  /program/section
-         *  /program/section/add
-         *  /program/section/{$}/{$}
-         * 
-         */
-        $section=count($links)>4?$links[2]:'';
+        $section='';
+        if(in_array($path,$this->SectionRoutes)){
+            $section=$links[2]??'';
+        }
+
         $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
         if(!$is_Permission){
             throw new ForbiddenException();
@@ -137,5 +136,4 @@ class Router{
     
     return call_user_func($callback,$this->request,$this->response );
    }
-
 } 
