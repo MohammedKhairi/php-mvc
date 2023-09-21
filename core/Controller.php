@@ -14,8 +14,10 @@
         Application::$app->view->title=$title;
     }
     public function reander($view,$params=[]) {
-        
         return Application::$app->view->renderView($view,$params); 
+    }
+    public function reanderApi($params=[]) {
+        return Application::$app->view->renderApiView($params); 
     }
     
  } 

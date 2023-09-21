@@ -27,7 +27,7 @@ class Permission extends Model{
         $this->program= new PermisionProgram;
         $this->user= new User;
         $this->group= new PermisionGroup;
-        $this->userOption=Application::$app->fun->OrderdArray($this->user->get(),k:'id',v:'firstname');
+        $this->userOption=Application::$app->fun->OrderdArray($this->user->get(),k:'id',v:'username');
         $this->groupOption=Application::$app->fun->OrderdArray($this->group->get(),k:'id',v:'name');
         $this->programOption=Application::$app->fun->OrderdArray($this->program->get(),k:'id',v:'title');
     }
@@ -75,7 +75,7 @@ class Permission extends Model{
     
         $_p=$this->Pagination();
         $D=Application::$app->db->query('SELECT `p`.`id` `pid`,
-        `u`.`firstname` `uname`,
+        `u`.`username` `uname`,
         `o`.`title` `otitle`,
         `p`.`section`,
         `g`.`name` `gname`

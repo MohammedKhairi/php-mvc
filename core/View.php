@@ -21,6 +21,11 @@ class View
 
         return str_replace('{content}', $viewContent, $layoutcontent);
     }
+    public function renderApiView($params = [])
+    {
+        $layoutcontent = $this->layoutContent();
+        return str_replace('{content}',json_encode($params) , $layoutcontent);
+    }
     public function layoutContent()
     {
 

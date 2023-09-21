@@ -5,9 +5,10 @@ namespace app\models;
 use app\core\Application;
 use app\core\Model;
 class Register extends Model{
-    public $firstname='';
-    public $lastname='';
+    public $username='';
     public $email='';
+    public $img='';
+    public $lvl='user';
     public $password='';
     public $confirmPassword='';
     /**
@@ -15,13 +16,12 @@ class Register extends Model{
      */
     public $dbTableName='users';
 
-    private $dbColums=['firstname','lastname','email','password'];
+    private $dbColums=['username','email','password'];
 
     public function rules():array
     {
         return[
-             'firstname'      =>[self::RULE_REQUIERD],
-             'lastname'       =>[self::RULE_REQUIERD],
+             'username'      =>[self::RULE_REQUIERD],
              'email'          =>[self::RULE_REQUIERD,self::RULE_EMAIL,[self::RULE_UNIQUE,'class'=>self::class]],
              'password'       =>[self::RULE_REQUIERD,[self::RULE_MIN,'min'=>5],[self::RULE_MAX,'max'=>24]],
              'confirmPassword'=>[self::RULE_REQUIERD,[self::RULE_MATCH,'match'=>'password']],
@@ -29,8 +29,7 @@ class Register extends Model{
     }
     public function lables():array{
         return[
-            'firstname'      =>'First Name',
-            'lastname'       =>'Last Name',
+            'username'      =>'Your Name',
             'email'          =>'Email',
             'password'       =>'Password',
             'confirmPassword'=>'Confirm  Password',
@@ -43,9 +42,10 @@ class Register extends Model{
     public function register(){
         
         $last_id=Application::$app->db->insert($this->dbTableName,[
-            'firstname'=>$this->firstname,
-            'lastname'=>$this->lastname,
+            'username'=>$this->username,
             'email'=>$this->email,
+            'img'=>$this->img,
+            'lvl'=>$this->lvl,
             'password'=> password_hash($this->password,PASSWORD_DEFAULT),
             'created'=>time(),
         ]);

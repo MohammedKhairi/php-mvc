@@ -2,6 +2,7 @@
 namespace app\core;
 use app\core\exception\ForbiddenException;
 use app\core\exception\NotFondException;
+use app\core\middlewares\ApiMiddleware;
 use app\core\middlewares\AuthMiddleware;
 
 
@@ -9,6 +10,7 @@ class Router{
    public  Request $request;
    protected array $routes=[];
    protected array $AuthRoutes=[];
+   protected array $ApiRoutes=[];
    protected array $SectionRoutes=[];
 
    public  Response $response;
@@ -20,8 +22,13 @@ class Router{
    }
    public function isAutherize($path){
         $arr=$this->request->getUrlArray();
+        #
         if(isset($arr[0]) && $arr[0]==cp("") )
-        $this->AuthRoutes[]=$path;
+            $this->AuthRoutes[]=$path;
+        #
+        if(isset($arr[0]) && $arr[0]==api("") )
+            $this->ApiRoutes[]=$path;
+        #
    }
    public function isSection($path,$is_section){
         if($is_section)
@@ -40,6 +47,19 @@ class Router{
     $this->isSection($path,$is_section);
     #
     $this->routes['post'][$path]=$callback;
+   }
+   /**
+    * Except Post and Get Request
+    */
+   public function req($path , $callback,bool $is_section=false){
+    $this->isAutherize($path);
+    #
+    $this->isSection($path,$is_section);
+    #
+    if($this->request->isGet())
+        $this->routes['get'][$path]=$callback;
+    if($this->request->isPost())
+        $this->routes['post'][$path]=$callback;
    }
    public function getCallback(){
     
@@ -102,6 +122,7 @@ class Router{
         #
     }
     /**
+     * --------CP Auth--------
      * check route with middleware
      * if path is not auth shoe no Permissions Page
      */
@@ -121,6 +142,16 @@ class Router{
 
         $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
         if(!$is_Permission){
+            throw new ForbiddenException();
+        }
+    }
+    /**
+     * --------Api Auth--------
+     */
+    if(in_array($path,$this->ApiRoutes)){
+        $Apimiddileware=new ApiMiddleware();
+        $_Auth=$Apimiddileware->execute();
+        if(!$_Auth){
             throw new ForbiddenException();
         }
     }

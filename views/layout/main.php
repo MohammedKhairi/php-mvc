@@ -44,9 +44,7 @@
                         <ul>
                         <?php if (Application::$app->UserInfo()): ?>
                             <li>
-                                <?= Application::$app->UserInfo()['fname'] ?>
-                                -
-                                <?= Application::$app->UserInfo()['lname'] ?>
+                                <?= Application::$app->UserInfo()['username'] ?>
                             </li>
                             <li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
                             <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
@@ -138,13 +136,15 @@
         </div>
     </div> <!-- End mainmenu area -->
     <!-- Message Show -->
-    <?php if (Application::$app->session->getFlash('success')): ?>
+    <!-- <?php if (Application::$app->session->getFlash('success')): ?>
         <div>
             <?php echo Application::$app->session->getFlash('success'); ?>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
     <!-- End Message Show -->
     {content}
+
+    
     <div class="slider-area">
         <!-- Slider -->
         <div class="block-slider block-slider4">

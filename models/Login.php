@@ -27,12 +27,9 @@ class Login extends Model{
             'password'       =>'Password',
        ];
     }
-    public function tableName():string{
-        return $this->dbTableName;
-    }
     public function login(){
-        $D=Application::$app->db->row('SELECT `id`,`firstname`,`lastname`,`password`,`email`
-            FROM '.$this->tableName().' WHERE `email`=?',[$this->email]
+        $D=Application::$app->db->row('SELECT `id`,`username`,`password`,`email`,`img`
+            FROM '.$this->dbTableName.' WHERE `email`=?',[$this->email]
         );
         #
         if(!$D){
@@ -46,9 +43,9 @@ class Login extends Model{
         #
         Application::$app->session->set('user',[
             'id'    =>$D['id'],
-            'fname' =>$D['firstname'],
-            'lname' =>$D['lastname'],
+            'username' =>$D['username'],
             'email' =>$D['email'],
+            'img' =>$D['img'],
         ]);
         #
         return true;
