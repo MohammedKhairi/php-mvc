@@ -15,13 +15,13 @@ class Router{
 
    public  Response $response;
    public  View $view;
-  
    public function __construct(Request $request ,Response $response) {
     $this->request=$request;
     $this->response=$response;
    }
-   public function isAutherize($path){
+   public function isAutherize(){
         $arr=$this->request->getUrlArray();
+        $path=$this->request->getUrl();
         #
         if(isset($arr[0]) && $arr[0]==cp("") )
             $this->AuthRoutes[]=$path;
@@ -35,24 +35,24 @@ class Router{
             $this->SectionRoutes[]=$path;
     }
    public function get($path , $callback,bool $is_section=false){
-    $this->isAutherize($path);
+    $this->isAutherize();
     #
     $this->isSection($path,$is_section);
     #
     $this->routes['get'][$path]=$callback;
    }
    public function post($path , $callback,bool $is_section=false){
-    $this->isAutherize($path);
+    $this->isAutherize();
     #
     $this->isSection($path,$is_section);
     #
     $this->routes['post'][$path]=$callback;
    }
    /**
-    * Except Post and Get Request
+    * Both Post and Get Request
     */
    public function req($path , $callback,bool $is_section=false){
-    $this->isAutherize($path);
+    $this->isAutherize();
     #
     $this->isSection($path,$is_section);
     #
@@ -108,10 +108,8 @@ class Router{
     $path=$this->request->getUrl();
     #
     $method=$this->request->getMethod();
-
+    #
     $callback=$this->routes[$method][$path]??false;
-    //var_dump($this->routes[$method][$path]);exit;
-     
     #Note Fond
     if(false ===$callback){
         #
@@ -141,19 +139,17 @@ class Router{
         }
 
         $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
-        if(!$is_Permission){
+        if(!$is_Permission)
             throw new ForbiddenException();
-        }
     }
     /**
-     * --------Api Auth--------
+     * --------API Auth--------
      */
     if(in_array($path,$this->ApiRoutes)){
         $Apimiddileware=new ApiMiddleware();
         $_Auth=$Apimiddileware->execute();
-        if(!$_Auth){
+        if(!$_Auth)
             throw new ForbiddenException();
-        }
     }
     #Only View 
     if(is_string($callback)){
@@ -164,7 +160,23 @@ class Router{
         Application::$app->controller =new $callback[0]();
         $callback[0]=Application::$app->controller;
     }
-    
+    /**
+     * Set the Layout and Perfixe link 
+     */
+    #Set CP
+    if(in_array($path,$this->AuthRoutes)){
+        Application::$app->controller->layout="admin";
+        Application::$app->view->prev ='admin/';
+    }
+
+    #Set API
+    if(in_array($path,$this->ApiRoutes)){
+        Application::$app->controller->layout="api";
+
+    }
+    /**
+     * Send the script 
+     */
     return call_user_func($callback,$this->request,$this->response );
    }
 } 

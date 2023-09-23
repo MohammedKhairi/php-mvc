@@ -7,8 +7,8 @@
     public function setLayout($layout=''){
         $this->layout=$layout;
     }
-    public function setPrevPage($prev=''){
-        Application::$app->view->prev='admin/';
+    public function setPrevPage($prev){
+        Application::$app->view->prev=$prev;
     }
     public function setTitle($title=''){
         Application::$app->view->title=$title;

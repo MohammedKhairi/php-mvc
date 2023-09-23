@@ -8,10 +8,6 @@ use app\core\Request;
 use app\models\Permission;
 
 class PermissionController extends Controller{   
-    public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
-    }
     public function get(Request $request) {
         
         $PermissionModel=new Permission();

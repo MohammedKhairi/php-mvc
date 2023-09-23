@@ -8,10 +8,6 @@ use app\core\Request;
 use app\models\PermisionProgram;
 
 class PermisionProgramController extends Controller{   
-    public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
-    }
     public function get(Request $request) {
         $programModel=new PermisionProgram();
         return $this->reander('permission-programes',[

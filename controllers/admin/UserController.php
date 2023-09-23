@@ -7,11 +7,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\models\Admin;
 
-class UserController extends Controller{   
-    public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
-    }
+class UserController extends Controller{ 
     public function get(Request $request) {
         
         $UserModel=new Admin();
@@ -76,14 +72,13 @@ class UserController extends Controller{
             $data=$UserModel->getOne($id);
             $UserModel->username=$data['username'];
             $UserModel->email=$data['email'];
-            //$UserModel->password=$data['password'];
             $UserModel->img=$data['img'];
             $UserModel->lvl=$data['lvl'];
         }
         return $this->reander('user-set',[
                 'model'=>$UserModel,
                 'name'=>'update',
-                'title'=>'Edit User: '.$data['name']??0,
+                'title'=>'Edit User: '.$data['username']??'',
             ]
         );
     }

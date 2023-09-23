@@ -10,10 +10,6 @@ use app\models\ArticalPhoto;
 
 class ArticalController extends Controller{
 
-    public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
-    } 
     public function get(Request $request) {
         
         $articalModel=new Artical();

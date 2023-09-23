@@ -7,8 +7,8 @@ use app\core\Controller;
 
 class AdminController extends Controller{
     public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
+        // $this->setLayout('admin');
+        // $this->setPrevPage('/admin');
     }
     public function get(){
         //$this->setTitle('Dashboard Page');

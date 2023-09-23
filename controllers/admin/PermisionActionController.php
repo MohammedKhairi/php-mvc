@@ -8,10 +8,6 @@ use app\core\Request;
 use app\models\PermisionAction;
 
 class PermisionActionController extends Controller{   
-    public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
-    }
     public function get() {
         $actionModel=new PermisionAction();
         return $this->reander('permission-actions',[

@@ -26,8 +26,7 @@ class ApiMiddleware {
         }
         else
         return false;
-    }
-    
+    } 
     public function getBearerToken() {
         $headers = $this->getAuthorizationHeader();
 

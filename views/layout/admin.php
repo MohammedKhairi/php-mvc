@@ -84,10 +84,13 @@ $slideLinks = [
                 <div class="sidebar-user border-bottom">
                     <div class="d-flex justify-content-center align-content-center">
                         <a href="">
-                            <div class="cerculer-img boxshadow1" style="background-image: url('/assets/admin/img/user.jpg');"></div>
+                            <div 
+                                class="cerculer-img boxshadow1" 
+                                style="background-image: url('<?=Application::$app->fun->uploads().Application::$app->session->get('user')['img']?>');">
+                            </div>
                         </a>
                     </div>
-                    <h6 class="c fmedium my-4">User Name </h6>
+                    <h6 class="c fmedium my-4"><?=Application::$app->session->get('user')['username']?> </h6>
                 </div>
                 <ul class="sidebar-nav  py-2">
                 <?php foreach ($slideLinks as $link): ?>
@@ -126,7 +129,6 @@ $slideLinks = [
                     </div>
                     <div class="col-10">
                         <ul class="d-flex justify-content-end align-items-center mx-3 text-light list-unstyled">
-
                             <li class="p-2 ptr setting-btn"><i class="fs-5 icon-cog"></i></li>
                             <li class="p-2 ptr dropdown">
                                 <i class="fs-5 icon-user"></i>

@@ -40,9 +40,6 @@ class Category extends Model{
             'order'     =>'Category Navbar Order',
        ];
     }
-    public function tableName():string{
-        return $this->dbTableName;
-    }
     public function insert(){
         $imageClass=new Image();
         $filename=$imageClass->cropResizeUpload($this->img,dst_w:600,dst_h:400);
@@ -78,7 +75,7 @@ class Category extends Model{
         $this->setOrder();
         $_p=$this->Pagination();
         $D=Application::$app->db->query('SELECT `id`,`name`,`title`,`img`,`nav`,`order`,`deleted` 
-        From '.$this->tableName()
+        From '.$this->dbTableName
         .(!empty($this->whr)?' where '.$this->whr:'').
         $_p->getLimit()
         ,$this->params);
@@ -87,7 +84,7 @@ class Category extends Model{
     }
     public function getAll(){
         $D=Application::$app->db->query('SELECT `id`,`name`,`title`,`img`,`nav`,`order`,`deleted` 
-        From '.$this->tableName().' WHERE `deleted`=0'
+        From '.$this->dbTableName.' WHERE `deleted`=0'
         ,$this->params);
         return $D;
     }
@@ -99,7 +96,7 @@ class Category extends Model{
         `nav`,
         `order`,
         `deleted` 
-        From '.$this->tableName().' 
+        From '.$this->dbTableName.' 
         WHERE `id`=?',[$id]);
         return $D;
     }

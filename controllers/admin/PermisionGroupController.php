@@ -10,10 +10,6 @@ use app\models\PermisionGroupAction;
 
 class PermisionGroupController extends Controller{  
     public $actionOption=[]; 
-    public function __construct() {
-        $this->setLayout('admin');
-        $this->setPrevPage('/admin');
-    }
     public function get() {
         $groupModel=new PermisionGroup();
         return $this->reander('permission-groups',[
