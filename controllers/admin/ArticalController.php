@@ -7,7 +7,6 @@ use app\core\Controller;
 use app\core\Request;
 use app\models\Artical;
 use app\models\ArticalPhoto;
-
 class ArticalController extends Controller{
 
     public function get(Request $request) {
@@ -133,6 +132,7 @@ class ArticalController extends Controller{
 
 
     }
+    
 
     
 }

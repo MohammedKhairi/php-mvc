@@ -25,6 +25,7 @@ use app\controllers\admin\CategoryController;
 use app\controllers\admin\PermisionProgramController;
 use app\controllers\admin\PermissionController;
 use app\controllers\admin\UserController;
+use app\controllers\admin\ExportController;
 
 /**
  * Gloabal Varible 
@@ -128,6 +129,9 @@ $app->router->req(cp().'/artical/edit/{id}',[ArticalController::class,'edit']);
 $app->router->get(cp().'/artical/delete/{id}',[ArticalController::class,'delete']);
 $app->router->get(cp().'/artical/delete/photo/{id}',[ArticalController::class,'delete_photo']);
 $app->router->get(cp().'/artical/photo/ismain/{id}/{val}',[ArticalController::class,'ismain_photo']);
+
+$app->router->get(cp().'/artical/export/excel',[ExportController::class,'artical_excel']);
+
 /**
  * Permisions Pages
  */

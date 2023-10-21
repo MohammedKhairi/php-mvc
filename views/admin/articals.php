@@ -21,7 +21,7 @@ use app\core\Application;
                         <i class="fs-5 text-light icon-attachment"></i>
                         <ul class="dropdown-menu">
                             <a href="#" class="dropdown-item ptr">Pdf</a>
-                            <a href="#" class="dropdown-item ptr">Excel</a>
+                            <a href="/cp/artical/export/excel" class="dropdown-item ptr">Excel</a>
                             <a href="#" class="dropdown-item ptr">Csv</a>
                         </ul>
                     </button>
