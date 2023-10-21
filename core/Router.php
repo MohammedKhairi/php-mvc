@@ -130,17 +130,23 @@ class Router{
         if(!$_Auth){
             throw new ForbiddenException();
         }
+        ###################[if Not Super admin]##################
         //
-        $links=$this->request->getUrlArray();
-        $program=$links[1]??'';
-        $section='';
-        if(in_array($path,$this->SectionRoutes)){
-            $section=$links[2]??'';
+        $lvl = Application::$app->session->get('user')['lvl']??'';
+        if($lvl != 'admin'){
+            $links=$this->request->getUrlArray();
+            $program=$links[1]??'';
+            $section='';
+            if(in_array($path,$this->SectionRoutes)){
+                $section=$links[2]??'';
+            }
+    
+            $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
+            if(!$is_Permission)
+                throw new ForbiddenException();
         }
-
-        $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
-        if(!$is_Permission)
-            throw new ForbiddenException();
+       
+        //
     }
     /**
      * --------API Auth--------

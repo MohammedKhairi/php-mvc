@@ -1,5 +1,14 @@
 <?php
 /**
+ * Stop the code if the entry not use browser
+ */
+if(!isset($_SERVER['HTTP_USER_AGENT']))
+    die;
+/**
+ * define if the serve is local or online
+*/
+define('is_local', (PHP_OS == 'WINNT' || PHP_OS == 'Darwin'));
+/**
  * Start Of the Website
  */
 require_once __DIR__.'/../vendor/autoload.php';
@@ -27,19 +36,33 @@ define('Dir', __DIR__);
  * Config 
  */
 $config['db']=[
-    'dbhost'=>'localhost',
-    'dbn'=>'mvc_db',
-    'user'=>'root',
-    'password'=>'',
+    'dbhost'    =>is_local?'localhost':'',
+    'dbn'       =>is_local?'mvc_db':'',
+    'user'      =>is_local?'root':'',
+    'password'  =>is_local?'':'',
 ];
 #
 $config['cpanel']='cp';
 $config['api']='api';
 #
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-#
+if(!is_local){
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+}
+else{
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL); 
+}
+/**
+ * Define Some static Request
+ */
+define('is_ajax',(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'));
+
+/**
+ * Country And Timezone
+ */
+date_default_timezone_set('Asia/Baghdad');
 /**
  * Summary of cp
  * @return string

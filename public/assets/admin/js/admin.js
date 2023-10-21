@@ -167,3 +167,7 @@ $(document).on("click touch",".reject-delete",function(){
     $("#DeleteModal").hide();
     $('.modal_content').html("");
 });
+//Order bar 
+$(document).on("click toch", ".order-btn , .order-close-btn", function () {
+    $(".order-bar").toggleClass("order-bar-enabled");
+});

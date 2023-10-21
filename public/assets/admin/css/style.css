@@ -608,7 +608,46 @@ ul.responsive-table2 {
     margin-top: -4px;
     text-decoration: none;
 }
+/* Order Bar  */
+.order-bar {
+    background-color: var(--b-white);
+    -webkit-box-shadow: 0 0 24px 0 rgb(49 58 70 / 10%), 0 1px 0 0 rgb(49 58 70 / 8%);
+    box-shadow: 0 0 24px 0 rgb(49 58 70 / 10%), 0 1px 0 0 rgb(49 58 70 / 8%);
+    display: block;
+    position: fixed;
+    -webkit-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    width: 280px;
+    z-index: 3;
+    top: 0;
+    left: -280px;
+    bottom: 0;
+    padding-bottom: 80px;
+}
 
+.order-bar.order-bar-enabled {
+    left: 0;
+}
+
+.order-bar .rightbar-title {
+    background-color: var(--c-indigo);
+    padding: 10px 5px !important;
+    color: var(--c-white);
+}
+
+.order-bar .order-bar-toggle {
+    background-color: var(--dark-2);
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 22px;
+    color: var(--b-white);
+    text-align: center;
+    border-radius: 50%;
+    margin-top: -4px;
+    text-decoration: none;
+}
+/*  */
 .form-check {
     display: block;
     min-height: 1.35rem !important;
@@ -991,6 +1030,15 @@ html[dir="ltr"] #toasts {
 html[dir="ltr"] .menu-tools {
     left: auto;
     right: 1.2rem;
+}
+
+html[dir="ltr"] .order-bar {
+    left: auto;
+    right: -280px !important;
+}
+
+html[dir="ltr"] .order-bar.order-bar-enabled {
+    right: 0 !important;
 }
 
 /* mobile */
