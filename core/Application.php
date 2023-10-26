@@ -43,7 +43,6 @@ class Application {
        return empty($this->session->get('user'))?false:true;
     }
     public function UserInfo(){
-
         return $this->session->get('user')??[];
      }
 

@@ -32,8 +32,11 @@ class ArticalPhoto extends Model{
             'is_main'   =>'Is Main Photo',
        ];
     }
+    public function tableName():string{
+        return $this->dbTableName;
+    }
     public function insert($art_id,$images){
-        if(!empty($images)){
+        if(!empty($images) && isset($images['name'][0]) && !empty($images['name'][0])){
             $imageClass=new Image();
             $filenames=$imageClass->devideMultiFiles($images);
 

@@ -13,7 +13,7 @@ class ArticalController extends Controller{
         
         $articalModel=new Artical();
         return $this->reander('articals',[
-                'title'=>'Artical Page',
+                'app_title'=>'Artical Page',
                 'data'=>$articalModel->get(),
             ]
         );
@@ -24,7 +24,6 @@ class ArticalController extends Controller{
         if($request->isPost())
         {
             $articalModel->loadData($request->getBody());
-
             if(
                 $articalModel->validate() && 
                 $articalModel->insert() ){
@@ -39,12 +38,11 @@ class ArticalController extends Controller{
         return $this->reander('artical-add',[
                 'model'=>$articalModel,
                 'name'=>'add',
-                'title'=>'Add New Artical',
+                'app_title'=>'Add New Artical',
             ]
         );
     }
     public function edit(Request $request) {
-        
         $articalModel=new Artical();
         $articalPhotoModel=new ArticalPhoto();
         $data=[];
@@ -54,7 +52,7 @@ class ArticalController extends Controller{
             $articalModel->loadData($request->getBody());
 
             if(
-                //$articalModel->validate(Without:['images']) && 
+                $articalModel->validate(Without:['imags']) && 
                 $articalModel->update($id)){
                 Application::$app->session->setFlash('success','Artical Update Successfuly');
                 Application::$app->response->redirect('/cp/artical');
@@ -66,7 +64,7 @@ class ArticalController extends Controller{
         }
         if($id){
             $data=$articalModel->getOne($id);
-            $articalModel->title=$data['title'];
+            $articalModel->title  =$data['title'];
             $articalModel->content=$data['content'];
             $articalModel->is_show=$data['is_show'];
             $articalModel->cate_id=$data['cate_id'];
@@ -76,7 +74,7 @@ class ArticalController extends Controller{
                 'model'=>$articalModel,
                 'images'=>$images,
                 'name'=>'edit',
-                'title'=>'Edit Artical: '.$articalModel->title,
+                'app_title'=>'Edit Artical: '.$articalModel->title,
             ]
         );
     }
@@ -131,8 +129,5 @@ class ArticalController extends Controller{
         exit; 
 
 
-    }
-    
-
-    
+    } 
 }

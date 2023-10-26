@@ -20,11 +20,11 @@ class AuthMiddleware {
         else
             return false;
     }
-    public function isPermission(string $program,string $section ,string $method):bool{
+    public function isPermission(string $program,string $method):bool{
         //user info from session 
         $u_info=Application::$app->session->get('user');
         //check if user have permission on the program
-        $D=$this->permission->getWithProgram($u_info['id'],$program,$section,$method);
+        $D=$this->permission->getWithProgram($u_info['id'],$program,$method);
         //vd($D);exit;
         if(!empty($D)){
             return true;

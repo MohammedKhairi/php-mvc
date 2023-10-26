@@ -67,7 +67,7 @@ $slideLinks = [
     <link rel="stylesheet" href="/assets/admin/css/style.css?">
     <script src="/assets/admin/js/jquery.js"></script>
     <script src="/assets/admin/js/tost.js"></script>
-    <title><?= $title ?></title>
+    <title><?= $app_title ?></title>
 </head>
 
 <body>
@@ -155,7 +155,7 @@ $slideLinks = [
                 <!--END TOPBAR -->
                 <!-- Page Details -->
                 <div class="header-nav">
-                    <h3 class="header-title text-white"><?=$title?></h3>
+                    <h3 class="header-title text-white"><?=$app_title?></h3>
                     <ol class="d-flex align-items-center list-unstyled p-0">
                         <li class="page-links">
                             <a class="mx-1" href="/cp/dashboard"><i class="icon-home3"></i></a>
@@ -250,6 +250,25 @@ $slideLinks = [
         </div>
     </div>
     <!--Setting Bar -->
+    <!-- Order Div -->
+    <div class="order-bar">
+        <div class="rightbar-title d-flex align-items-center  justify-content-between">
+            <h5 class="m-0">Order Bar</h5>
+            <a href="javascript:void(0);" class="order-close-btn">
+                <i class="icon-cancel-circle txt-orange fp140"></i>
+            </a>
+        </div>
+        <div class="p-3">
+            <!-- <form method="get">
+                <label for="title">Tile</label>
+                <input type="text" class="form-control mb-1" name="title" id="title">
+                <label for="number">Number</label>
+                <input type="number" class="form-control mb-1" name="number" id="number">
+                <button type="button" name="order" class="btn btn btn-primary btn-sm wp100 my-2">Submit</button>
+            </form> -->
+        </div>
+    </div>
+    <!-- Order Div -->
     <!-- Modal -->
     <div class="modal_content"></div>
     <!--End Modal -->

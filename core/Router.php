@@ -11,7 +11,7 @@ class Router{
    protected array $routes=[];
    protected array $AuthRoutes=[];
    protected array $ApiRoutes=[];
-   protected array $SectionRoutes=[];
+   protected array $ActionsRoutes=[];
 
    public  Response $response;
    public  View $view;
@@ -30,31 +30,31 @@ class Router{
             $this->ApiRoutes[]=$path;
         #
    }
-   public function isSection($path,$is_section){
-        if($is_section)
-            $this->SectionRoutes[]=$path;
+   public function setActions($path,$_action){
+        if(!empty($_action))
+            $this->ActionsRoutes[$path]=$_action;
     }
-   public function get($path , $callback,bool $is_section=false){
+   public function get($path , $callback,string $_action=''){
     $this->isAutherize();
     #
-    $this->isSection($path,$is_section);
+    $this->setActions($path,$_action);
     #
     $this->routes['get'][$path]=$callback;
    }
-   public function post($path , $callback,bool $is_section=false){
+   public function post($path , $callback,string $_action=''){
     $this->isAutherize();
     #
-    $this->isSection($path,$is_section);
+    $this->setActions($path,$_action);
     #
     $this->routes['post'][$path]=$callback;
    }
    /**
     * Both Post and Get Request
     */
-   public function req($path , $callback,bool $is_section=false){
+   public function req($path , $callback,string $_action=''){
     $this->isAutherize();
     #
-    $this->isSection($path,$is_section);
+    $this->setActions($path,$_action);
     #
     if($this->request->isGet())
         $this->routes['get'][$path]=$callback;
@@ -133,19 +133,19 @@ class Router{
         ###################[if Not Super admin]##################
         //
         $lvl = Application::$app->session->get('user')['lvl']??'';
+
         if($lvl != 'admin'){
-            $links=$this->request->getUrlArray();
-            $program=$links[1]??'';
-            $section='';
-            if(in_array($path,$this->SectionRoutes)){
-                $section=$links[2]??'';
+            if(isset($this->ActionsRoutes[$path])){
+                $links=explode('.', $this->ActionsRoutes[$path]);
+                $program=$links[0]??'';
+                $method=$links[1]??'';
+        
+                $is_Permission=$Authmiddileware->isPermission(program:$program,method:$method);
+                if(!$is_Permission)
+                    throw new ForbiddenException();
             }
-    
-            $is_Permission=$Authmiddileware->isPermission(program:$program,section:$section,method:$callback[1]??'');
-            if(!$is_Permission)
-                throw new ForbiddenException();
+            
         }
-       
         //
     }
     /**
@@ -174,7 +174,6 @@ class Router{
         Application::$app->controller->layout="admin";
         Application::$app->view->prev ='admin/';
     }
-
     #Set API
     if(in_array($path,$this->ApiRoutes)){
         Application::$app->controller->layout="api";

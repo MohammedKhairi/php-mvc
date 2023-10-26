@@ -91,7 +91,7 @@ class PermissionController extends Controller{
             Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
 
         }
-        Application::$app->response->redirect('/cp/permision');
+        Application::$app->response->redirect('/cp/permission');
         exit;
     }
     public function restore(Request $request) {
@@ -108,7 +108,7 @@ class PermissionController extends Controller{
             Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
 
         }
-        Application::$app->response->redirect('/cp/permision');
+        Application::$app->response->redirect('/cp/permission');
         exit;
     }
     

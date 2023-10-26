@@ -29,6 +29,9 @@ class Artical extends Model{
             $this->categories[$cat['id']]=$cat['title'];
         }
     }
+    public function tableName():string{
+        return $this->dbTableName;
+    }
     public function rules():array
     {
         return[
@@ -36,7 +39,7 @@ class Artical extends Model{
              'is_show'    =>[self::RULE_REQUIERD],
              'cate_id'    =>[self::RULE_REQUIERD],
              'content'    =>[self::RULE_REQUIERD],
-             'imags'        =>[self::RULE_REQUIERD,[self::RULE_FILES,'exe'=>['png','jpg']]],
+             'imags'      =>[self::RULE_REQUIERD,[self::RULE_FILES,'exe'=>['png','jpg']]],
         ];
     }
     public function lables():array{
@@ -65,14 +68,15 @@ class Artical extends Model{
         Application::$app->db->update($this->dbTableName,[
             'title'     =>$this->title,
             'content'   =>$this->content,
-            'cate_id'   => $this->cate_id,
-            'is_show'   => $this->is_show
+            'cate_id'   =>$this->cate_id,
+            'is_show'   =>$this->is_show
         ],['id'=>$id]);
         $art_Photo=new ArticalPhoto();
         $art_Photo->insert($id,$this->imags);
         return $id;
     }
     public function get(){
+        $_p=$this->Pagination();
         $D=Application::$app->db->query('SELECT `a`.`id`,
         `a`.`cate_id`,
         `a`.`title`,
@@ -84,8 +88,10 @@ class Artical extends Model{
         From '.$this->dbTableName.' `a`
         inner join `category` `c` on  `a`.`cate_id` =`c`.`id` and `c`.`deleted`=0   
         left join `artical_photo` `p` on  `a`.`id` =`p`.`art_id` and `p`.`deleted`=0 and `p`.`is_main`=1
-        '
-    );
+        group by `a`.`id`
+        '.$_p->getLimit()
+        );
+        $D['pagination']=$_p->drawPager($D['data_number']);
         return $D;
     }
     public function getOne($id){

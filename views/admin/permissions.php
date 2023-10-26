@@ -12,7 +12,6 @@
     <li class="table-header">
         <div class="col col-3">User Name</div>
         <div class="col col-2">Program Name</div>
-        <div class="col col-2">Section Name</div>
         <div class="col col-2">Group Name</div>
         <div class="col col-1">Actions</div>
     </li>
@@ -21,7 +20,6 @@
         <li class="table-row border-2 border-bottom">
             <div class="col col-3" data-label="User Name"><?=$d['uname']?></div>
             <div class="col col-2" data-label="Program Name"><?=$d['otitle']?></div>
-            <div class="col col-2" data-label="Program Name"><?=$d['section']?></div>
             <div class="col col-2" data-label="Group Name"><?=$d['gname']?></div>
             <div class="col col-1" data-label="Actions">
                 <div class="menu-tools">

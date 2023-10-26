@@ -10,7 +10,6 @@ class Permission extends Model{
     public $user_id='';
     public $group_id='';
     public $program_id='';
-    public $section='';
     private $program;
     private $user;
     private $group;
@@ -22,7 +21,7 @@ class Permission extends Model{
      */
     public $dbTableName='role_has_permition';
 
-    private $dbColums=['user_id','group_id','program_id','section'];
+    private $dbColums=['user_id','group_id','program_id'];
     public function __construct() {
         $this->program= new PermisionProgram;
         $this->user= new User;
@@ -44,7 +43,6 @@ class Permission extends Model{
             'user_id'     =>'Users List',
             'program_id'  =>'Programes List',
             'group_id'    =>'Groups List',
-            'section'     =>'Section Name ( Leave it Empty if you do not have )'
        ];
     }
     public function tableName():string{
@@ -54,7 +52,6 @@ class Permission extends Model{
         $last_id=Application::$app->db->insert($this->dbTableName,[
             'user_id'=>$this->user_id,
             'program_id'=>$this->program_id,
-            'section'=>$this->section,
             'group_id'=>$this->group_id,
             'created'=>time(),
         ]);
@@ -64,7 +61,6 @@ class Permission extends Model{
         $last_id=Application::$app->db->update($this->dbTableName,[
             'user_id'=>$this->user_id,
             'program_id'=>$this->program_id,
-            'section'=>$this->section,
             'group_id'=>$this->group_id,
             ],
             ['id'=>$id]
@@ -77,7 +73,6 @@ class Permission extends Model{
         $D=Application::$app->db->query('SELECT `p`.`id` `pid`,
         `u`.`username` `uname`,
         `o`.`title` `otitle`,
-        `p`.`section`,
         `g`.`name` `gname`
         From '.$this->tableName().' `p`
         inner join `users` `u` on `p`.`user_id`=`u`.`id` and `u`.`deleted`=0
@@ -93,7 +88,7 @@ class Permission extends Model{
         return $D;
     }
     public function getOne($id){
-        $D=Application::$app->db->row('SELECT `id`,`user_id`,`program_id`,`group_id`,`deleted`,`section`
+        $D=Application::$app->db->row('SELECT `id`,`user_id`,`program_id`,`group_id`,`deleted`
         From '.$this->tableName().' WHERE `id`=?',[$id]);
         return $D;
     }
@@ -101,21 +96,18 @@ class Permission extends Model{
      * Summary of getWithProgram
      * @param mixed $uid
      * @param mixed $pname
-     * @param mixed $section
      * @param mixed $action
      * @return array
      */
-    public function getWithProgram($uid,$pname,$section,$action):array{
+    public function getWithProgram($uid,$pname,$action):array{
         $this->whr.=' AND `u`.`id`=?';
         $this->whr.=' AND `o`.`name`=?';
-        $this->whr.=' AND `p`.`section`=?';
         $this->whr.=' AND `a`.`name`=?';
         $this->params[]=$uid;
         $this->params[]=$pname;
-        $this->params[]=$section;
         $this->params[]=$action; 
         //vd($this->whr);vd($this->params);exit;
-        $D=Application::$app->db->query('SELECT `p`.`id` `pid`,`g`.`id` `gid`,`p`.`section`
+        $D=Application::$app->db->query('SELECT `p`.`id` `pid`,`g`.`id` `gid`
         From '.$this->tableName().'`p`
         inner join `users` `u` on `p`.`user_id`=`u`.`id` and `u`.`deleted`=0
         inner join `role_program` `o` on `p`.`program_id`=`o`.`id` and `o`.`deleted`=0

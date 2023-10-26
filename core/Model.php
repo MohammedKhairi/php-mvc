@@ -19,7 +19,6 @@ abstract class Model {
 
     
     public function loadData($data) {
-
          foreach ($data as $key => $value) {
              if(property_exists($this,$key ))
                 $this->{$key}=$value;
@@ -33,7 +32,7 @@ abstract class Model {
          return $this->lables()[$attribute]??$attribute; 
     }
     abstract public function rules():array;
-    public function validate(array $Without=[]) {
+    public function validate(array $Without=[]){
 
         foreach ($this->rules() as $attribute => $rules) {
             

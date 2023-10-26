@@ -27,6 +27,9 @@ class Login extends Model{
             'password'       =>'Password',
        ];
     }
+    public function tableName():string{
+        return $this->dbTableName;
+    }
     public function login(){
         $D=Application::$app->db->row('SELECT `id`,`username`,`password`,`email`,`img`,`lvl`
             FROM '.$this->dbTableName.' WHERE `email`=?',[$this->email]

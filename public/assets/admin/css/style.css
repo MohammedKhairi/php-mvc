@@ -171,6 +171,9 @@ body {
 .bg-c-white {
     background: var(--c-white);
 }
+.bg-c-light {
+    background: var(--c-light);
+}
 
 /* [class^="icon-"], [class*=" icon-"]{
     color: var(--c-dark) !important;

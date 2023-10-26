@@ -40,6 +40,9 @@ class Category extends Model{
             'order'     =>'Category Navbar Order',
        ];
     }
+    public function tableName():string{
+        return $this->dbTableName;
+    }
     public function insert(){
         $imageClass=new Image();
         $filename=$imageClass->cropResizeUpload($this->img,dst_w:600,dst_h:400);

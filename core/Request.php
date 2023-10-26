@@ -38,15 +38,14 @@ class Request {
         return strtolower($_SERVER['REQUEST_METHOD']); 
     }
     public function isGet(){
-        return $this->getMethod() ==='get';
+        return $this->getMethod() =='get'?true:false;
     }
     public function isPost(){
-        return $this->getMethod() ==='post';
+        return $this->getMethod() =='post'?true:false;
     }
     public function getBody (){
-        $body=[]; 
-
-        if($this->isGet()){
+        $body=[];
+        if($this->isGet()==true){
             foreach ($_GET as $key => $value) {
                 if(is_array($value))
                     $body[$key]=$value;
