@@ -7,6 +7,9 @@ class InputField extends BaseField {
      public const TYPE_TXT='text';
      public const TYPE_PASSWORD='password';
      public const TYPE_EMAIL='email';
+     public const TYPE_DATE='date'; 
+     public const TYPE_DATE_Time='datetime-local'; 
+     public const TYPE_Time='time'; 
      public const TYPE_NUMBER='number'; 
      public string $type ;
 
@@ -24,6 +27,19 @@ class InputField extends BaseField {
         $this->type=self::TYPE_EMAIL;
         return $this; 
      }
+     public function dateField(){
+         $this->type=self::TYPE_DATE;
+         return $this; 
+      }
+      public function datetimeField(){
+         $this->type=self::TYPE_DATE_Time;
+         return $this; 
+      }
+      public function timeField(){
+         $this->type=self::TYPE_Time;
+         return $this; 
+      }
+      
      public function numberField(){
       $this->type=self::TYPE_NUMBER;
       return $this; 

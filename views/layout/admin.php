@@ -1,278 +1,445 @@
-<?php
+<?php 
 use app\core\Application;
+use app\models\Log;
+/**
+ * Application Data
+ */
+$_session=Application::$app->session;
+$_fun=Application::$app->fun;
+$_request=Application::$app->request;
+$_user=$_session->get('user');
+/**
+ * Databae Data
+ */
+$_db=Application::$app->db;
+$LogModel=new Log();
+$_alert=$LogModel->getAlert($_user['lvl'],$_user['id']);
 
+/**
+ * Slider Data
+ */
 $slideLinks = [
     [
-        "title" => "Dashboard",
+        "title" => "لوحة التحكم",
         "name" => "dashboard",
         "slag" => "/cp/dashboard",
-        "icon" => "dashboard.svg"
+        "permission"=>["admin","editor","student","employee"],
+        "icon" => "icon-home",
     ],
     [
-        "title" => "Category",
-        "name" => "category",
-        "slag" => "/cp/category",
-        "icon" => "dashboard.svg",
-        "sub" => [
-            ["title" => "Show", "slag" => ""],
-            ["title" => "ADD", "slag" => "/add"],
-        ]
-    ],
-    [
-        "title" => "Artical",
-        "name" => "artical",
-        "slag" => "/cp/artical",
-        "icon" => "dashboard.svg",
-        "sub" => [
-            ["title" => "Show", "slag" => ""],
-            ["title" => "ADD", "slag" => "/add"],
-        ]
-    ],
-    [
-        "title" => "Users",
-        "name" => "user",
-        "slag" => "/cp/user",
-        "icon" => "dashboard.svg",
-        "sub" => [
-            ["title" => "Show", "slag" => ""],
-            ["title" => "ADD", "slag" => "/add"],
-        ]
-    ],
-    [
-        "title" => "Permission",
+        "title" => "الصلاحيات",
         "name" => "permission",
         "slag" => "/cp/permission",
-        "icon" => "dashboard.svg",
+        "permission"=>["admin"],
+        "icon" => "icon-bookmark-o",
         "sub" => [
-            ["title" => "Programes", "slag" => "/program"],
-            ["title" => "Actions", "slag" => "/action"],
-            ["title" => "Group", "slag" => "/group"],
-            ["title" => "Permission", "slag" => ""],
-
+            ["title" => "البرامج", "slag" => "/program"],
+            ["title" => "العمليات", "slag" => "/action"],
+            ["title" => "المجموعات", "slag" => "/group"],
+        ]
+    ],
+    [
+        "title" => "الموظف",
+        "name" => "employee",
+        "slag" => "/cp/employee",
+        "permission"=>["admin","editor"],
+        "icon" => "icon-teacher",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+        ]
+    ],
+    [
+        "title" => "الطالب",
+        "name" => "student",
+        "slag" => "/cp/student",
+        "permission"=>["admin","editor"],
+        "icon" => "icon-student-person",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+        ]
+    ],
+    [
+        "title" => "الصفوف والشعب",
+        "name" => "grade",
+        "slag" => "/cp/grade",
+        "permission"=>["admin","editor"],
+        "icon" => "icon-sitemap",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+            ["title" => "الشعب", "slag" => "/division"],
+        ]
+    ],
+    [
+        "title" => "المواد الدراسية",
+        "name" => "dars",
+        "slag" => "/cp/dars",
+        "icon" => "icon-seminar",
+        "permission"=>["admin","editor"],
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+        ]
+    ],
+    [
+        "title" => "جداول الدروس",
+        "name" => "learning",
+        "slag" => "/cp/learning",
+        "permission"=>["admin","editor"],
+        "icon" => "icon-calendar-o",
+        "sub" => [
+            ["title" => "المحاضرات الاسبوعية", "slag" => "/week"],
+            ["title" => "الامتحانات الشهرية" , "slag" => "/month"],
+            ["title" => "الامتحانات النهائية", "slag" => "/final"],
+        ]
+    ],
+    [
+        "title" => "المراسلات",
+        "name" => "message",
+        "slag" => "/cp/message",
+        "permission"=>["admin","editor","student","employee"],
+        "icon" => "icon-comment-o",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+        ]
+    ],
+    [
+        "title" => "الواجبات",
+        "name" => "task",
+        "slag" => "/cp/task",
+        "permission"=>["admin","editor","student","employee"],
+        "icon" => "icon-task",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+        ]
+    ],
+    [
+        "title" => "الاخبار",
+        "name" => "news",
+        "slag" => "/cp/news",
+        "permission"=>["admin","editor"],
+        "icon" => "icon-news",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
+        ]
+    ],
+    [
+        "title" => "التبليغات",
+        "name" => "alert",
+        "slag" => "/cp/alert",
+        "permission"=>["admin","editor","student","employee"],
+        "icon" => "icon-alert-square",
+        "sub" => [
+            ["title" => "استعراض", "slag" => ""],
+            ["title" => "اضافة", "slag" => "/add"],
         ]
     ],
 ];
-
 ?>
-<!--  -->
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="en" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/admin/css/icon.css?">
-    <link rel="stylesheet" href="/assets/admin/css/common.css?">
-    <link rel="stylesheet" href="/assets/admin/css/style.css?">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="/assets/admin/css/bootstrap.css" rel="stylesheet">
+    <link href="/assets/admin/css/icon.css" rel="stylesheet">
+    <link href="/assets/admin/css/style.css" rel="stylesheet">
     <script src="/assets/admin/js/jquery.js"></script>
+    <script src="/assets/admin/js/multiselect-dropdown.js"></script>
     <script src="/assets/admin/js/tost.js"></script>
-    <title><?= $app_title ?></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.0/dist/js/multi-select-tag.js"></script>
+    <title><?= $title ?></title>
 </head>
 
-<body>
-    <div class="ds-container">
-        <!-- SIDEBAR -->
-        <nav class="sidebar">
-            <div class="sidebar-content">
-                <div class="position-relative d-grid grid-columns-5-1 bg-c-gray px-4">
-                    <a href="" class="sidebar-brand  d-block text-sm-center text-white py-3 txt-orange fp125">COMPANY</a>
-                    <a href="javascript:void(0);" class="close-sidebar menu-btn-toggler">
-                        <i class="icon-cancel-circle txt-orange fp140"></i>
-                    </a>
+<body theme-mode="" font-typography="Roboto">
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper" class="show">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <a href="javascript:void()" class="brand-logo">
+                <i class="icon-bank"></i>
+                <h5 class="brand-title">اسم المدرسة</h5>
+            </a>
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span><span class="line"></span><span class="line"></span>
                 </div>
-                <div class="sidebar-user border-bottom">
-                    <div class="d-flex justify-content-center align-content-center">
-                        <a href="">
-                            <div 
-                                class="cerculer-img boxshadow1" 
-                                style="background-image: url('<?=Application::$app->fun->uploads().Application::$app->session->get('user')['img']?>');">
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content">
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <!--  -->
+                        <div class="header-left">
+                            <div class="input-group search-area right d-lg-inline-flex d-none">
+                                <input type="text" class="form-control" placeholder="ابحث هنا ....">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </div>
                             </div>
+                        </div>
+                        <!--  -->
+                        <ul class="navbar-nav header-right main-notification">
+                            <li class="nav-item notification_dropdown">
+                                <a class="nav-link" id="toggleMode" href="javascript:void()">
+                                    <i id="mode-icon"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item notification_dropdown">
+                                <a class="nav-link" href="javascript:void(0)">
+                                    <i class="icon-comment-o"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown notification_dropdown">
+                                <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
+                                    <i class="icon-bell-o"></i>
+                                    <?php if(!empty($_alert)):?>
+                                        <div class="pulse-css"></div>
+                                    <?php endif?>
+                                </a>
+                                <div class="dropdown-menu-c dropdown_menu_anm1 dropdown-menu-w">
+                                    <!-- Admin -->
+                                    <?php if("admin"==$_user['lvl'] || "student"==$_user['lvl']):?>
+                                        <?php foreach ($_alert['data'] as $a):?>
+                                            <a href="/cp/alert/show/<?=$a['aid']?>" class="text-color">
+                                                <div class="d-flex align-items-center p-2 border-bottom2">
+                                                    <div class="col-4">
+                                                        <div class="d-flex flex-column align-items-center">
+                                                            <img class="w40 mh40 rounded-circle" src="<?=$_fun->uploads().$a['eimg']?>">
+                                                            <small class="text-primary"><?=$a['ename']?></small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <p class="text-colum-2"><?=$a['acontent']?></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        <?php endforeach;?>
+                                    <?php endif;?>
+                                    <!-- Employee -->
+
+                                    <!-- Student -->
+                                </div>
+
+                            </li>
+                            <li class="nav-item dropdown header-profile">
+                                <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
+                                    <img src="<?=$_fun->uploads().$_user['img']?>" width="20" alt="">
+                                    <div class="header-info">
+                                        <span><?=$_user['username']?></span>
+                                        <small>
+                                            <?=$_fun->getLevel($_user['lvl'])?>
+                                        </small>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu-c dropdown_menu_anm1">
+                                    <a href="/cp/user/profile" class="dropdown-item-c ">
+                                        <i class="icon-user"></i>
+                                        <span>الملف الشخصي </span>
+                                    </a>
+                                    <a href="/cp/user/profile" class="dropdown-item-c ">
+                                        <i class="icon-lock"></i>
+                                        <span>تغيير الرمز السري</span>
+                                    </a>
+                                    <a href="/logout" class="dropdown-item-c ">
+                                        <i class="icon-sign-out "></i>
+                                        <span>تسجيل الخروج</span>
+                                    </a>
+
+                                </div>
+                            </li>
+                        </ul>
+                        <!--  -->
+                    </div>
+                </nav>
+                <div class="sub-header d-flex align-items-center justify-content-between">
+                    <div class="">
+                        <h5 class="dashboard_bar"><?=$title?> </h5>
+                    </div>
+                    <!-- <div class="d-flex align-items-center">
+                        <a href="javascript:void(0);" class="btn btn-xs btn-primary light mr-1">يوم</a>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-primary light mr-1">شهر</a>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-primary light">سنة</a>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="sidebar">
+            <div class="sidebar-scroll ps">
+                <div class="main-profile">
+                    <div class="image-bx">
+                        <img src="<?=$_fun->uploads().$_user['img']?>" alt="">
+                        <a href="javascript:void(0);">
+                            <i class="icon-cog"></i>
                         </a>
                     </div>
-                    <h6 class="c fmedium my-4"><?=Application::$app->session->get('user')['username']?> </h6>
+                    <h5 class="name"><?=$_user['username']?></h5>
+                    <p class="email"><?=$_user['email']?></p>
                 </div>
-                <ul class="sidebar-nav  py-2">
-                <?php foreach ($slideLinks as $link): ?>
-            
-                    <li class="sidebar-item <?=Application::$app->request->getActiveUrl()==$link['name']?' active slided':''?>">
-                        <a  href="<?=(isset($link['sub']) && !empty($link['sub']))?'javascript:void(0);':$link['slag'] ?>" 
-                            class="sidebar-link <?=(isset($link['sub']) && !empty($link['sub']))?'sidebar-row':'fp120' ?>">
-                            <i class="icon-home3"></i>
-                            <?= $link['title'] ?>
-                        </a>
-                        <?php if (isset($link['sub']) && !empty($link['sub'])): ?>
-                            <ul class="sidebar-dropdown" <?=Application::$app->request->getActiveUrl()==$link['name']?'style="display:block;"':''?>>
+                
+                <ul class="metismenu" id="menu">
+                    <!--  -->
+                    <?php foreach ($slideLinks as $link): ?>
+                        <?php if( in_array($_user['lvl'],$link['permission'])): ?>
+                        <li class="<?=($_request->getActiveUrl()==$link['name']?'link-active slided':'')?>">
+                            <a 
+                                <?= (isset($link['sub']) && !empty($link['sub'])
+                                    ?("class='has-arrow' href='javascript:void()'")
+                                    :("href='".$link['slag']."'"))
+                                ?>
+                            >
+                                <i class="<?= $link['icon'] ?>"></i>
+                                <span class="nav-text"><?= $link['title'] ?></span>
+                            </a>
+
+                            <?php if (isset($link['sub']) && !empty($link['sub'])): ?>
+                            <ul class="dropdown_menu_anm1">
                                 <?php foreach ($link['sub'] as $s): ?>
-                                    <li class="sidebar-item-sub">
-                                        <a class="sidebar-link" href="<?= $link['slag'] . $s['slag'] ?>"><?= $s['title'] ?></a>
-                                    </li>
+                                <li>
+                                    <a 
+                                        class="<?=($_request->getActiveUrl2()==($link['slag'] . $s['slag'])?'mm-active':'')?>"  
+                                        href="<?= $link['slag'] . $s['slag'] ?>"><?= $s['title'] ?>
+                                    </a>
+                                </li>
                                 <?php endforeach; ?>
                             </ul>
                             <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-                    
+
+                        </li>
+                        <?php endif;?>
+                    <?php endforeach; ?>
+
+                    <!--  -->
                 </ul>
             </div>
-        </nav>
-        <!--END SIDEBAR -->
-        <!-- Page Content -->
-        <div class="page-content">
-            <div class="page-container">
-                <!-- TOPBAR -->
-                <div class="topbar d-flex justify-content-between align-items-center">
-                    <div class="col-2">
-                        <div class="menu-btn menu-btn-toggler">
-                            <div class="menu-btn__burger"></div>
-                        </div>
+        </div>
+        <!--**********************************
+            Orderbar
+        ***********************************-->
+
+        <div class="order-bar">
+            <div class="rightbar-title d-flex align-items-center  justify-content-between">
+                <h5 class="m-0">قائمة الفرز</h5>
+                <a href="javascript:void(0);" class="order-close-btn">
+                    <i class="icon-close1"></i>
+                </a>
+            </div>
+            <div class="p-3">
+                <form method="get">
+                    <label for="title" class="my-1">العنوان</label>
+                    <input type="text" class="form-control mb-1" name="title" id="title">
+                    
+                    <label for="number" class="my-1">الرقم</label>
+                    <input type="number" class="form-control mb-1" name="number" id="number">
+                    
+                    <button type="button" name="order" class="btn btn btn-primary btn-sm wp100 my-2">فرز</button>
+                </form>
+            </div>
+        </div>
+        <!--**********************************
+            Orderbar end
+        ***********************************-->
+        <!--**********************************
+            Modal 
+        ***********************************-->
+        <div class="modal_content"></div>
+        <!--**********************************
+            Modal end
+        ***********************************-->
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="mx-sm-3 mt-4">
+                    <!-- Toasts -->
+                    <div id="toasts"></div>
+                    <div class="demo">
+
+                    <?php if ($_session->getFlash('success')): ?>
+                            <?php echo '<script>MsgSuccess("'.$_session->getFlash('success').'")</script>'; ?>
+                    <?php endif; ?>
+                    <?php if ($_session->getFlash('error')): ?>
+                            <?php echo '<script>MsgError("'.$_session->getFlash('error').'")</script>'; ?>
+                    <?php endif; ?>
+                    <?php if ($_session->getFlash('warring')): ?>
+                            <?php echo '<script>MsgWarring("'.$_session->getFlash('warring').'")</script>'; ?>
+                    <?php endif; ?>
                     </div>
-                    <div class="col-10">
-                        <ul class="d-flex justify-content-end align-items-center mx-3 text-light list-unstyled">
-                            <li class="p-2 ptr setting-btn"><i class="fs-5 icon-cog"></i></li>
-                            <li class="p-2 ptr dropdown">
-                                <i class="fs-5 icon-user"></i>
-                                <ul class="dropdown-menu">
-                                    <a href="#" class="dropdown-item ptr">عنصر لنك 1</a>
-                                    <a href="#" class="dropdown-item ptr">عنصر لنك 2</a>
-                                    <a href="#" class="dropdown-item ptr">عنصر لنك 3</a>
-                                </ul>
-                            </li>
-                            <li class="p-2 ptr dropdown">
-                                <i class="fs-5 icon-notification---Copy"></i>
-                                <span class="bedget-content"></span>
-                                <ul class="dropdown-menu">
-                                    <a href="#" class="dropdown-item ptr">اشعار 1</a>
-                                    <a href="#" class="dropdown-item ptr">اشعار 2</a>
-                                    <a href="#" class="dropdown-item ptr">اشعار 3</a>
-                                </ul>
-                            </li>
-                            <li class="p-2 ptr"><a href="/" class="txt-white"><i class="fs-5 icon-sphere"></i></a></li>
-                            <li class="p-2 ptr"><a href="/logout" class="txt-white"><i class="fs-5 icon-switch"></i></a></li>
-                        </ul>
-                    </div>
+                    <!-- End Toasts -->
+                    <!-- Put Content -->
+                    {content}
+                    <!-- End Put Content  -->
                 </div>
-                <!--END TOPBAR -->
-                <!-- Page Details -->
-                <div class="header-nav">
-                    <h3 class="header-title text-white"><?=$app_title?></h3>
-                    <ol class="d-flex align-items-center list-unstyled p-0">
-                        <li class="page-links">
-                            <a class="mx-1" href="/cp/dashboard"><i class="icon-home3"></i></a>
-                        </li>
-                        <?php
-                        $links=Application::$app->request->getUrl();  
-                        $links=explode('/',$links);
-                        $links=array_filter( $links);
-                        $temp='/cp';
-                        foreach ($links as $l) {
-                        if($l !="cp"){
-                        $temp.='/'.$l;
-
-                            echo'<li class="page-links">
-                                    <a class=" mx-1" href="'.$temp.'">'.ucfirst($l).'</a>
-                                </li>';
-                        }
-                           
-                        }
-                         //print_r($links);                    
-                        ?>
-                    </ol>
-                </div>
-                <!--End Page Details -->
-                <!-- Page Data -->
-                <main class="r5">
-                    <div class="container-fluid py-6 ">
-                        <!--  -->
-                        <div id="toasts"></div>
-                        <div class="demo">
-
-                        <?php if (Application::$app->session->getFlash('success')): ?>
-                                <?php echo '<script>MsgSuccess("'.Application::$app->session->getFlash('success').'")</script>'; ?>
-                        <?php endif; ?>
-                        <?php if (Application::$app->session->getFlash('error')): ?>
-                                <?php echo '<script>MsgError("'.Application::$app->session->getFlash('error').'")</script>'; ?>
-                        <?php endif; ?>
-                        <?php if (Application::$app->session->getFlash('warring')): ?>
-                                <?php echo '<script>MsgWarring("'.Application::$app->session->getFlash('warring').'")</script>'; ?>
-                        <?php endif; ?>
-                        </div>
-
-                        <!--  -->
-                       {content}
-                    </div>
-                  
-                </main>
-                <!-- EndPage Data -->
             </div>
-
         </div>
-        <!--END Page Content -->
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright © Designed &amp; Developed by <a href="../index.htm" target="_blank"> Mohammed Khairi </a>2023</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
     </div>
-    <!--Setting Bar -->
-    <div class="end-bar">
-        <div class="rightbar-title d-flex align-items-center  justify-content-between">
-            <h5 class="m-0">Setting</h5>
-            <a href="javascript:void(0);" class="setting-close-btn">
-                <i class="icon-cancel-circle txt-orange fp140"></i>
-            </a>
-        </div>
-        <div class="p-3">
-            <div class="alert alert-warning fp90">
-              All setting will save in Browser
-            </div>
-            <!-- Settings -->
-            <h6 class="mt-3 fw-bold fmedium">Panal Mode</h6>
-            <hr class="mt-1">
-            <div class="form-check form-switch mb-1">
-                <input class="form-check-input toggle-theme" type="checkbox" value="stander" id="stander">
-                <label class="fp80" for="stander">Normal</label>
-            </div>
-            <div class="form-check form-switch mb-1">
-                <input class="form-check-input toggle-theme" type="checkbox" value="dark" id="dark">
-                <label class="fp80" for="dark">Dark</label>
-            </div>
-            <div class="form-check form-switch mb-1">
-                <input class="form-check-input toggle-theme" type="checkbox" value="light" id="light">
-                <label class="fp80" for="light">Light</label>
-            </div>
-            <!--  -->
-            <h6 class="mt-3 fw-bold fmedium">Sidebar State</h6>
-            <hr class="mt-1">
-            <div class="form-check form-switch mb-1">
-                <input class="form-check-input" type="checkbox" id="open-sidebar">
-                <label class="fp80" for="open-sidebar">Open/Close</label>
-            </div>
-            <!--  -->
-            <div class="d-grid mt-4">
-                <button class="btn btn-primary" id="resetBtn">Reset Setting</button>
-            </div>
-        </div>
-    </div>
-    <!--Setting Bar -->
-    <!-- Order Div -->
-    <div class="order-bar">
-        <div class="rightbar-title d-flex align-items-center  justify-content-between">
-            <h5 class="m-0">Order Bar</h5>
-            <a href="javascript:void(0);" class="order-close-btn">
-                <i class="icon-cancel-circle txt-orange fp140"></i>
-            </a>
-        </div>
-        <div class="p-3">
-            <!-- <form method="get">
-                <label for="title">Tile</label>
-                <input type="text" class="form-control mb-1" name="title" id="title">
-                <label for="number">Number</label>
-                <input type="number" class="form-control mb-1" name="number" id="number">
-                <button type="button" name="order" class="btn btn btn-primary btn-sm wp100 my-2">Submit</button>
-            </form> -->
-        </div>
-    </div>
-    <!-- Order Div -->
-    <!-- Modal -->
-    <div class="modal_content"></div>
-    <!--End Modal -->
+    <!--**********************************
+        Scripts
+    ***********************************-->
     <script src="/assets/admin/js/admin.js"></script>
+
 </body>
- 
+
 </html>

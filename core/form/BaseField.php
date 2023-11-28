@@ -14,7 +14,7 @@ abstract class BaseField {
     abstract  public function ReanderInput ():string;
     public function __toString(){
         return sprintf('
-           <div>
+           <div class="my-3">
                <label for="%s" class="form-label">%s</label>
                 %s
                <div class="text-danger">

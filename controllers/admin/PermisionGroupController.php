@@ -7,14 +7,16 @@ use app\core\Controller;
 use app\core\Request;
 use app\models\PermisionGroup;
 use app\models\PermisionGroupAction;
+use app\models\PermisionGroupProgram;
+use app\models\PermisionProgram;
 
 class PermisionGroupController extends Controller{  
     public $actionOption=[]; 
     public function get() {
         $groupModel=new PermisionGroup();
         return $this->reander('permission-groups',[
-                'title'=>'Permission Group Page',
-                'data'=>$groupModel->getGroupAction(),
+                'title'=>'صفحة المجموعات',
+                'data'=>$groupModel->getGroups(),
             ]
         );
     }
@@ -27,19 +29,24 @@ class PermisionGroupController extends Controller{
             $groupModel->loadData($request->getBody());
 
             if($groupModel->validate() && $groupModel->insert() ){
-                Application::$app->session->setFlash('success','Permission Group Add Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
                 Application::$app->response->redirect('/cp/permission/group');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
+        //
+        $ProgramModel=new PermisionProgram();
 
+        $programs=$ProgramModel->get();
+        $groupModel->programOption=Application::$app->fun->OrderdArray($programs,'id','title');
+        //
         return $this->reander('permission-groups-set',[
                 'model'=>$groupModel,
                 'name'=>'add',
-                'title'=>'Add New Permission Group',
+                'title'=>'اضافة مجموعة جديدة',
             ]
         );
     }
@@ -59,12 +66,12 @@ class PermisionGroupController extends Controller{
                // $groupModel->validate() && 
                 $groupModel->update($id) )
             {
-                Application::$app->session->setFlash('success','Permission Group Update Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('update'));
                 Application::$app->response->redirect('/cp/permission/group');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         #get Data
@@ -72,13 +79,20 @@ class PermisionGroupController extends Controller{
         if($id){
             $data=$groupModel->getOne($id);
             $gaction=$groupActionModel->get($id);
+            $groupModel->title=$data['title'];
             $groupModel->name=$data['name'];
-            $groupModel->action_id=$data=Application::$app->fun->ArrayByKey($gaction,'aid');
+            $groupModel->program_id=$data['program_id'];
+            $groupModel->action_id=Application::$app->fun->ArrayByKey($gaction,'aid');
+             //
+            $ProgramModel=new PermisionProgram();
+            $programs=$ProgramModel->get();
+            $groupModel->programOption=Application::$app->fun->OrderdArray($programs,'id','title');
+            //
         }
         return $this->reander('permission-groups-set',[
                 'model'=>$groupModel,
                 'name'=>'update',
-                'title'=>'Edit Permission Group: '.$data['name']??0,
+                'title'=>'تعديل بيانات المجموعة: '.$data['title']??'',
             ]
         );
     }
@@ -90,10 +104,10 @@ class PermisionGroupController extends Controller{
             $groupModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $groupModel->remove($id) ){
-                Application::$app->session->setFlash('success','Permission Group Deleted Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('delete'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/permission/group');
@@ -109,10 +123,10 @@ class PermisionGroupController extends Controller{
             $groupModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $groupModel->restore($id) ){
-                Application::$app->session->setFlash('success','Permission Group Restore Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('restore'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/permission/group');

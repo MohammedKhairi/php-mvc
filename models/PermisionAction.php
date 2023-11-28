@@ -24,8 +24,8 @@ class PermisionAction extends Model{
     }
     public function lables():array{
         return[
-            'title'     =>'Action Title',
-            'name'      =>'Action Name',
+            'title'     =>'العنوان',
+            'name'      =>'الاسم',
        ];
     }
     public function tableName():string{
@@ -37,6 +37,7 @@ class PermisionAction extends Model{
             'name'      =>$this->name,
             'created'=>time(),
         ]);
+        $this->setLog('permission_action','add',$last_id);
         return $last_id;
     }
     public function update($id){
@@ -46,6 +47,7 @@ class PermisionAction extends Model{
             ],
             ['id'=>$id]
         );
+        $this->setLog('permission_action','edit',$id);
         return $last_id;
     }
     public function get(){
@@ -65,10 +67,12 @@ class PermisionAction extends Model{
     }
     public function remove($id){
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>time()],['id'=>$id]);
+        $this->setLog('permission_action','remove',$id);
         return $last_id;
     }
     public function restore($id){
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>0],['id'=>$id]);
+        $this->setLog('permission_action','restore',$id);
         return $last_id;
     }
 

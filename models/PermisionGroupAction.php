@@ -64,4 +64,8 @@ class PermisionGroupAction extends Model{
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>time()],['id'=>$id]);
         return $last_id;
     }
+    public function removeByTaskId($group_id){
+        Application::$app->db->query("DELETE  FROM " . $this->dbTableName . " WHERE `group_id`=? ",[$group_id]);
+        return true;
+    }
 }

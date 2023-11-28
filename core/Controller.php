@@ -10,8 +10,8 @@
     public function setPrevPage($prev){
         Application::$app->view->prev=$prev;
     }
-    public function setTitle($app_title=''){
-        Application::$app->view->app_title=$app_title;
+    public function setTitle($title=''){
+        Application::$app->view->title=$title;
     }
     public function reander($view,$params=[]) {
         return Application::$app->view->renderView($view,$params); 

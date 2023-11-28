@@ -4,7 +4,7 @@ namespace app\core;
 class View
 {
 
-    public string $app_title = '';
+    public string $title = '';
     public string $prev = '';
     public function __construct($link='') {
         $this->prev = $link;
@@ -14,7 +14,7 @@ class View
     }
     public function renderView($view, $params = [])
     {
-        $this->app_title=$params['app_title']??'';
+        $this->title=$params['title']??'';
         $layoutcontent = $this->layoutContent();
 
         $viewContent = $this->reanderOnlyView($view, $params);
@@ -35,7 +35,7 @@ class View
             $layout = Application::$app->controller->layout;
         }
 
-        $app_title=$this->app_title;
+        $title=$this->title;
         ob_start();
         include_once Application::$ROOT_DIR . '/views/layout/' . $layout . '.php';
         return ob_get_clean();

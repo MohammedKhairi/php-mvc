@@ -12,7 +12,7 @@ class ArticalPhoto extends Model{
     /**
      * Database Table Info
      */
-    public $dbTableName='artical_photo';
+    public $dbTableName='artical_file';
 
     private $dbColums=['filename','art_id','is_main'];
     public function __construct() {
@@ -27,9 +27,9 @@ class ArticalPhoto extends Model{
     } 
     public function lables():array{
         return[
-            'filename'  =>'Artical Photo',
-            'art_id'    =>'Artical ID',
-            'is_main'   =>'Is Main Photo',
+            'filename'  =>'صورة الخبر',
+            'art_id'    =>'رقم الخبر',
+            'is_main'   =>'هل الصوره رئيسية',
        ];
     }
     public function tableName():string{

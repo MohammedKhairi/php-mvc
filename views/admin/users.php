@@ -16,22 +16,22 @@
 
 <ul class="responsive-table2 fmedium my-2">
     <li class="table-header">
-        <div class="col col-2">User Name</div>
-        <div class="col col-2">Imag</div>
-        <div class="col col-2">Email</div>
-        <div class="col col-2">Level</div>
-        <div class="col col-1">Actions</div>
+        <div class="col col-2">الاسم</div>
+        <div class="col col-2">الصورة</div>
+        <div class="col col-2">الايميل</div>
+        <div class="col col-2">المستوى</div>
+        <div class="col col-1">العمليات</div>
     </li>
     <?php
  foreach ($data['data'] as $d):?>
         <li class="table-row border-2 border-bottom">
-            <div class="col col-2" data-label="User Name"><?=$d['username']?></div>
-            <div class="col col-2" data-label="Imag">
+            <div class="col col-2" data-label="الاسم"><?=$d['username']?></div>
+            <div class="col col-2" data-label="الصورة">
                 <img class="w50 mh50" src="/uploads/<?=$d['img']?>">
             </div>
-            <div class="col col-2" data-label="Email"><?=$d['email']?></div>
-            <div class="col col-2" data-label="Level"><?=$d['lvl']?></div>
-            <div class="col col-1" data-label="Actions">
+            <div class="col col-2" data-label="الايميل"><?=$d['email']?></div>
+            <div class="col col-2" data-label="المستوى"><?=$d['lvl']?></div>
+            <div class="col col-1" data-label="العمليات">
                 <div class="menu-tools">
                     <div class="tools-content">
                         <a href="/cp/user/edit/<?=$d['id']?>" class="mx-1 btn btn-sm btn-primary">Edit</a>

@@ -10,6 +10,7 @@ use app\models\Register;
 
 class AuthController extends Controller {
     public function login(Request $request){
+
         $loginModel=new Login();
         if($request->isPost())
         {
@@ -24,22 +25,6 @@ class AuthController extends Controller {
 
         $this->setLayout('auth');
         return $this->reander('login',['model'=>$loginModel]);
-    }
-    public function register(Request $request){
-        $userModel=new Register();
-        if($request->isPost())
-        {
-            $userModel->loadData($request->getBody());
-
-            if($userModel->validate() && $userModel->register()){
-                 Application::$app->session->setFlash('success','Thank You For Register');
-                 Application::$app->response->redirect('/');
-                 exit; 
-            }
-        }
-        $this->setLayout('auth');
-        
-        return $this->reander('register',['model'=>$userModel]);
     }
     public function logout(){
         $response=new Response(); 

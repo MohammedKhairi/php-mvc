@@ -15,7 +15,7 @@ class CategoryController extends Controller{
 
       // echo "<pre>";print_r($categoryModel->get()) ; echo "</pre>";exit;
         return $this->reander('categories',[
-                'app_title'=>'Category Page',
+                'title'=>'Category Page',
                 'data'=>$categoryModel->get(),
             ]
         );
@@ -40,7 +40,7 @@ class CategoryController extends Controller{
         return $this->reander('category-set',[
                 'model'=>$categoryModel,
                 'name'=>'add',
-                'app_title'=>'Add New Category',
+                'title'=>'Add New Category',
             ]
         );
     }
@@ -80,7 +80,7 @@ class CategoryController extends Controller{
         return $this->reander('category-set',[
                 'model'=>$categoryModel,
                 'name'=>'update',
-                'app_title'=>'Edit Category: '.$data['name']??0,
+                'title'=>'Edit Category: '.$data['name']??0,
             ]
         );
     }

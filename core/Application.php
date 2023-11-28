@@ -15,6 +15,7 @@ class Application {
     public  View $view;
     public  Database $db ;
     public  Fun $fun ;
+    public  array $translate ;
     public static Application $app;
     public static string $ROOT_DIR; 
     public string $layout='main';
@@ -27,6 +28,8 @@ class Application {
         $this->view=new View();
         $this->db=new Database($config['db']);
         $this->fun=new Fun();
+        $D=$this->db->query('SELECT `id`,`name`,`title` From `translate` WHERE `deleted`=0 and `lang`=?',[1]);
+        $this->translate=$this->fun->OrderdArray($D,'name','title');
         $this->router=new Router($this->request,$this->response);
     }
     public function run() {

@@ -1,12 +1,12 @@
 <?php 
 namespace app\core\middlewares;
 use app\core\Application;
-use app\models\Permission;
+use app\models\PermisionGroup;
 
 class AuthMiddleware {
     public $permission;
     public function __construct() {
-        $this->permission = new Permission();
+        $this->permission = new PermisionGroup();
     }
     /**
      * Summary of execute
@@ -14,24 +14,19 @@ class AuthMiddleware {
      */
     public function execute():bool{
          
-        if(Application::$app->isAuth()){
+        if(Application::$app->isAuth())
             return true;
-        }
         else
             return false;
     }
-    public function isPermission(string $program,string $method):bool{
-        //user info from session 
-        $u_info=Application::$app->session->get('user');
+    public function isPermission(string $lvl ,string $program,string $method):bool{
         //check if user have permission on the program
-        $D=$this->permission->getWithProgram($u_info['id'],$program,$method);
+        $D=$this->permission->getWithProgramAction($lvl,$program,$method);
         //vd($D);exit;
-        if(!empty($D)){
+        if(!empty($D))
             return true;
-        }
         else
-        return false;
-
+            return false;
     }
 
 

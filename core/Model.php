@@ -1,6 +1,7 @@
 <?php 
 namespace app\core;
 use app\core\Pagination;
+use app\models\Log;
 
 abstract class Model {
 
@@ -142,5 +143,10 @@ abstract class Model {
     public function Pagination(){
         $this->pagination=new Pagination();
         return  $this->pagination;
+    }
+    public function setLog($program='',$action='',$post_id=0){
+        $LogModel=new Log();
+        $user_id=Application::$app->session->get('user')['user_id'];
+        $LogModel->insert($user_id,$program,$action,$post_id);
     }
 }

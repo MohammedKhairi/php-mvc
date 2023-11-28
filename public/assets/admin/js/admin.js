@@ -1,4 +1,3 @@
-//######Language Array#########
 const Arb={
     "close":"خروج",
     "accept":"تاكيد",
@@ -22,46 +21,50 @@ const Eng={
     "fsize":"Font Size",
 };
 var _Lang={};
-//############################
-function  activeSidebar() {
-    $("#open-sidebar").prop("checked", true);
-    $(".sidebar").removeClass("toggled");
-    $(".page-content").removeClass("toggled");
-    $(".ds-container").removeClass("toggled");
+
+//check if the secreen is mbile or ipad
+if ($(window).width() < 980) {
+    $('#main-wrapper').addClass('menu-toggle');
+    $(".hamburger").addClass("is-active");
 }
-function  disactiveSidebar() {
-    $("#open-sidebar").prop("checked", false);
-    $(".sidebar").addClass("toggled");
-    $(".page-content").addClass("toggled");
-    $(".ds-container").addClass("toggled");
-}
+//sidebar toggle
+$(document).on("click",".hamburger",function(){
+    $(".hamburger").toggleClass("is-active");
+    $("#main-wrapper").toggleClass("menu-toggle");
+})
+
+//show and hide sub menu of sidebar
+$(document).on("click",".sidebar .metismenu li",function(e){
+    // e.preventDefault();
+    $(this).toggleClass('slided');
+    // $(this).children("ul").slideToggle("open").siblings().removeClass('open');
+})
+
+//on hover show and hide the sidebar
+$(document).on('mouseenter click','.menu-toggle .sidebar', function(e) {
+    //do something
+    // e.preventDefault();
+    $("#main-wrapper").toggleClass("menu-hover");
+});
+$(document).on('mouseleave click','.menu-toggle .sidebar', function(e) {
+    //do something
+    // e.preventDefault();
+    $("#main-wrapper").toggleClass("menu-hover");
+});
+
+//on load page using mode
 $(document).ready(function (){
     // check local storage for theme setting
-    if (localStorage.getItem("theme"))
+    if(localStorage.getItem("theme"))
     {
-        $("body").addClass(localStorage.getItem("theme"));
-        $("#"+localStorage.getItem("theme")).prop("checked", true);
+        $("body").attr("theme-mode",localStorage.getItem("theme"));
+        $("#mode-icon").addClass("icon-"+("dark"==localStorage.getItem("theme")?"sun":"moon"));
     }
     else
     {
-        var v="stander";
-        $("#"+v).prop("checked", true);
-        $("body").addClass(v);
-        localStorage.setItem("theme", v);
-    }
-    //sidebar show
-    if (localStorage.getItem("sidebar"))
-    {
-        if(1==localStorage.getItem("sidebar"))
-            activeSidebar();
-        else
-            disactiveSidebar();
-    }
-    else
-    {
-        activeSidebar();
-        localStorage.setItem("sidebar", 1);
-    }
+        $("body").attr("theme-mode","stander");
+        $("#mode-icon").addClass("icon-moon");
+    }    
     //set language array
     var dir = $("html").attr("dir");
     if(dir == "rtl")
@@ -73,75 +76,28 @@ $(document).ready(function (){
         _Lang=Eng;
 
     }
+});
+// change mode on click to mode-icon
 
-    
+$(document).on("click","#toggleMode",function(){
+    var mode= $("body").attr("theme-mode");
+    var revMode="dark"==mode?"stander":"dark";
+    $("body").attr("theme-mode",revMode);
+    $("#mode-icon").removeClass();
+    $("#mode-icon").addClass("icon-"+("dark"==revMode?"sun":"moon"));
+    localStorage.setItem("theme",revMode);
 });
-// toggle theme when button is clicked
-$(".toggle-theme").change(function () {
-    
-    if ($(this).is(":checked")) 
-    {
-        $(".toggle-theme").prop("checked", false)
-        var v=$(this).val();
-        $("#"+v).prop("checked", true);
-    }
-    else
-    {
-        var v="stander";
-        $("#"+v).prop("checked", true);
-    }
-    $("body").removeClass().addClass(v);
-    localStorage.setItem("theme", v);
+// Show and Hide dropdown
+$(document).on("click",".dropdown",function(){
+    $(this).children("div.dropdown-menu-c").toggleClass("show");
 });
-//Toggle Sidebar open or close setting
-$("#open-sidebar").change(function () {
-    
-    if ($(this).is(":checked")) 
-    {
-        activeSidebar();
-        localStorage.setItem("sidebar", 1);
-    }
-    else
-    {
-        disactiveSidebar();
-        localStorage.setItem("sidebar", 0);
-    }
-});
-//Sidebar Sub slink
-$('.sidebar-item').click(function () {
-    $(this).toggleClass('slided');
-    $(this).find("ul.sidebar-dropdown").slideToggle("open").siblings().removeClass('open');
-});
-
-//open and close sidebar
-$(document).on("click toch", ".menu-btn-toggler", function () {
-    // $(this).toggleClass("open");
-    $(".sidebar").toggleClass("toggled");
-    //    
-    $(".page-content").toggleClass("toggled");
-    //
-    $(".ds-container").toggleClass("toggled");
-    
-});
-$(document).on("click toch", ".dropdown", function () {
-    $(this).find("ul.dropdown-menu").slideToggle("open").siblings().removeClass('open');
-});
-//Right Sidebar Setting
-$(document).on("click toch", ".setting-btn , .setting-close-btn", function () {
-    $(".end-bar").toggleClass("end-bar-enabled");
-});
-$(document).on("click toch", "#resetBtn", function () {
-    localStorage.clear();
-    location.reload();
-});
-
 //deleted button alert
 function DeleteBtnAlert($url="") {
     //alert($url);
     var html='';
     html+='<div class="modal" id="DeleteModal">';
-    html+='  <div class="modal-dialog">';
-    html+='      <div class="modal-content">';
+    html+='  <div class="modal-dialog dropdown_menu_anm5">';
+    html+='      <div class="modal-content-c">';
     html+='        <div class="modal-header">';
     html+='            <h5 class="modal-title" id="exampleModalLabel">'+_Lang.delete_title+'</h5>';
     html+='        </div>';

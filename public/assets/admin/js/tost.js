@@ -28,7 +28,7 @@ function MsgSuccess(txt) {
         text: txt,
         color: '#2AA876',
         timeout: 5000,
-        icon: 'checkmark'
+        icon: 'check'
     });
 }
 function MsgWarring(txt) {
@@ -44,7 +44,7 @@ function MsgError(txt) {
         text: txt,
         color: '#dc3545',
         timeout: 5000,
-        icon: 'notification'
+        icon: 'close-outline'
     });
 }
 //

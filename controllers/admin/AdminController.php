@@ -12,7 +12,7 @@ class AdminController extends Controller{
     }
     public function get(){
         //$this->setTitle('Dashboard Page');
-        return $this->reander('dashboard',['title'=>'Dashboard Page']);
+        return $this->reander('dashboard',['title'=>'لوحة التحكم']);
     }    
      
 }

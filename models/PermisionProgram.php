@@ -24,8 +24,8 @@ class PermisionProgram extends Model{
     }
     public function lables():array{
         return[
-            'title'     =>'Program Title',
-            'name'      =>'Program Name',
+            'title'     =>'العنوان',
+            'name'      =>'الاسم',
        ];
     }
     public function tableName():string{
@@ -37,6 +37,7 @@ class PermisionProgram extends Model{
             'name'      =>$this->name,
             'created'=>time(),
         ]);
+        $this->setLog('permission_program','add',$last_id);
         return $last_id;
     }
     public function update($id){
@@ -46,6 +47,7 @@ class PermisionProgram extends Model{
             ],
             ['id'=>$id]
         );
+        $this->setLog('permission_program','edit',$id);
         return $last_id;
     }
     public function get(){
@@ -65,10 +67,12 @@ class PermisionProgram extends Model{
     }
     public function remove($id){
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>time()],['id'=>$id]);
+        $this->setLog('permission_program','remove',$id);
         return $last_id;
     }
     public function restore($id){
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>0],['id'=>$id]);
+        $this->setLog('permission_program','restore',$id);
         return $last_id;
     }
     

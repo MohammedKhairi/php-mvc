@@ -9,7 +9,7 @@ class FileField extends BaseField {
      public const TYPE_VIDEO='video/*';
      public const TYPE_IMAGE='image/*'; 
      public string $type ;
-     public string $multi ;
+     public string $multi='' ;
 
      public function __construct(Model $model,string $attribute,bool $multi) {
         $this->type = self::TYPE_IMAGE;

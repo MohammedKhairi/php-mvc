@@ -5,6 +5,6 @@
 <?php echo $form->SelectField($model,'lvl',$model->lvlNav??[],$model->lvl)?>
 <?php echo $form->fileField($model,'img')?>
 <button type="submit" class="btn btn-primary" name="$name" >
-    Submit
+    ارسال
 </button> 
 <?php echo app\core\form\Form::end();?>

@@ -13,7 +13,7 @@ class ArticalController extends Controller{
         
         $articalModel=new Artical();
         return $this->reander('articals',[
-                'app_title'=>'Artical Page',
+                'title'=>'صفحة الاخبار',
                 'data'=>$articalModel->get(),
             ]
         );
@@ -27,18 +27,18 @@ class ArticalController extends Controller{
             if(
                 $articalModel->validate() && 
                 $articalModel->insert() ){
-                Application::$app->session->setFlash('success','Artical Add Successfuly');
-                Application::$app->response->redirect('/cp/artical');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
+                Application::$app->response->redirect('/cp/news');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+                Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         return $this->reander('artical-add',[
                 'model'=>$articalModel,
                 'name'=>'add',
-                'app_title'=>'Add New Artical',
+                'title'=>'اضافة خبر جديد',
             ]
         );
     }
@@ -54,27 +54,26 @@ class ArticalController extends Controller{
             if(
                 $articalModel->validate(Without:['imags']) && 
                 $articalModel->update($id)){
-                Application::$app->session->setFlash('success','Artical Update Successfuly');
-                Application::$app->response->redirect('/cp/artical');
+                    Application::$app->session->setFlash('success',Application::$app->fun->msg('update'));
+                Application::$app->response->redirect('/cp/news');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         if($id){
             $data=$articalModel->getOne($id);
             $articalModel->title  =$data['title'];
             $articalModel->content=$data['content'];
-            $articalModel->is_show=$data['is_show'];
-            $articalModel->cate_id=$data['cate_id'];
+            $articalModel->user_id=$data['user_id'];
             $images=$articalPhotoModel->getOne($id);
         }
         return $this->reander('artical-edit',[
                 'model'=>$articalModel,
                 'images'=>$images,
                 'name'=>'edit',
-                'app_title'=>'Edit Artical: '.$articalModel->title,
+                'title'=>'Edit Artical: '.$articalModel->title,
             ]
         );
     }
@@ -86,13 +85,13 @@ class ArticalController extends Controller{
             $articalModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $articalModel->remove($id) ){
-                Application::$app->session->setFlash('success','Artical Deleted Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('delete'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+                Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
-        Application::$app->response->redirect('/cp/artical');
+        Application::$app->response->redirect('/cp/news');
         exit; 
 
 
@@ -103,12 +102,12 @@ class ArticalController extends Controller{
         $articalPhotoModel->loadData($request->getBody());
         $id=$request->getRouteParams()['id']??0;
         if($id && $articalPhotoModel->remove($id) ){
-            Application::$app->session->setFlash('success','Artical Photo Deleted Successfuly');
+            Application::$app->session->setFlash('success',Application::$app->fun->msg('delete'));
         }
         else
-        Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+        Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
-        Application::$app->response->redirect('/cp/artical');
+        Application::$app->response->redirect('/cp/news');
         exit; 
 
 
@@ -120,12 +119,12 @@ class ArticalController extends Controller{
         $id=$request->getRouteParams()['id']??0;
         $val=$request->getRouteParams()['val']??0;
         if($id && $articalPhotoModel->updateMain($id,$val) ){
-            Application::$app->session->setFlash('success','Artical Photo Is Main Update Successfuly');
+            Application::$app->session->setFlash('success',Application::$app->fun->msg('restore'));
         }
         else
-        Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+        Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
-        Application::$app->response->redirect('/cp/artical');
+        Application::$app->response->redirect('/cp/news');
         exit; 
 
 

@@ -23,6 +23,7 @@ class Session {
     }
     public function remove($key){
          unset($_SESSION[$key]); 
+         session_destroy();
     }
     
     public function setFlash($key , $message){

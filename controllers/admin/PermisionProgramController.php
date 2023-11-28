@@ -11,7 +11,7 @@ class PermisionProgramController extends Controller{
     public function get(Request $request) {
         $programModel=new PermisionProgram();
         return $this->reander('permission-programes',[
-                'title'=>'Permission Program Page',
+                'title'=>'صفحة البرامج',
                 'data'=>$programModel->get(),
             ]
         );
@@ -24,19 +24,19 @@ class PermisionProgramController extends Controller{
             $programModel->loadData($request->getBody());
 
             if($programModel->validate() && $programModel->insert() ){
-                Application::$app->session->setFlash('success','Permission Program Add Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
                 Application::$app->response->redirect('/cp/permission/program');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
 
         return $this->reander('permission-programes-set',[
                 'model'=>$programModel,
                 'name'=>'add',
-                'title'=>'Add New Permission Program',
+                'title'=>'اضافة برنامج جديد',
             ]
         );
     }
@@ -55,12 +55,12 @@ class PermisionProgramController extends Controller{
                // $programModel->validate() && 
                 $programModel->update($id) )
             {
-                Application::$app->session->setFlash('success','Permission Program Update Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('update'));
                 Application::$app->response->redirect('/cp/permission/program');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         #get Data
@@ -73,7 +73,7 @@ class PermisionProgramController extends Controller{
         return $this->reander('permission-programes-set',[
                 'model'=>$programModel,
                 'name'=>'update',
-                'title'=>'Edit Permission Program: '.$data['name']??0,
+                'title'=>'تعديل بيانات البرنامج: '.$data['name']??0,
             ]
         );
     }
@@ -85,10 +85,10 @@ class PermisionProgramController extends Controller{
             $programModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $programModel->remove($id) ){
-                Application::$app->session->setFlash('success','Permission Program Deleted Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('delete'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/permission/program');
@@ -104,10 +104,10 @@ class PermisionProgramController extends Controller{
             $programModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $programModel->restore($id) ){
-                Application::$app->session->setFlash('success','Permission Program Restore Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('restore'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/permission/program');

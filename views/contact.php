@@ -4,5 +4,5 @@
 <?php echo $form->InputField($model,'email')->emailField();?>
 <?php echo $form->SelectField($model,'dep_id',$departments??[],"2")?>
 <?php echo $form->TextareaField($model,'body')?>
-<button type="submit">Submit</button>
+<button type="submit">ارسال</button>
 <?php echo app\core\form\Form::end();?>

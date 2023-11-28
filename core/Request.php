@@ -1,82 +1,107 @@
 <?php
 namespace app\core;
-class Request {
-    private array $routeParams =[];
-    public function getUrl() {
-        
-         $path=$_SERVER['REQUEST_URI']??'';
-         $postion=strpos($path,'?');
 
-         if(false===$postion){
-             return $path;
-         }
-         $path=substr($path,0,$postion);
+class Request
+{
+    private array $routeParams = [];
+    public function pathResolve($path): string
+    {
+        $path_len = strlen($path);
+        $lastCharPath = substr($path, $path_len - 1, $path_len);
+        $newPath = $lastCharPath == "/" ? substr($path, 0,$path_len - 1) : $path;
+        #
+        return $newPath;
+    }
+    public function getUrl()
+    {
+        $path = $_SERVER['REQUEST_URI'] ?? '';
+        $path = $this->pathResolve($path);
 
+        $postion = strpos($path, '?');
+
+        if (false === $postion) {
+            return $path;
+        }
+        $path = substr($path, 0, $postion);
         return $path;
     }
-    public function getUrlArray() {
-        
-        $links=explode('/',$this->getUrl());
+    public function getUrlArray()
+    {
+
+        $links = explode('/', $this->getUrl());
         $links = array_values(array_filter($links));
-       return $links;
-   }
-    public function getActiveUrl($is_cp=true):string {
-        
-        $path=$_SERVER['REQUEST_URI']??'';
-        $arr=explode('/',$path);
-        $a=array_filter($arr);
-        $link=$is_cp?$a[2]:$a[1];
-        if(str_contains($link,'?')){
-           $pos=strpos($link,'?');
-           return substr($link,0,$pos);
+        return $links;
+    }
+    public function getActiveUrl($is_cp = true): string
+    {
+
+        $path = $_SERVER['REQUEST_URI'] ?? '';
+        $arr = explode('/', $path);
+        $a = array_filter($arr);
+        $link = $is_cp ? $a[2] : $a[1];
+        if (str_contains($link, '?')) {
+            $pos = strpos($link, '?');
+            return substr($link, 0, $pos);
         }
         #
         return $link;
+    }
+    public function getActiveUrl2(): string
+    {
 
-   }
-    public function getMethod() {
-        return strtolower($_SERVER['REQUEST_METHOD']); 
+        $path = $_SERVER['REQUEST_URI'] ?? '';
+        #
+        return $path;
     }
-    public function isGet(){
-        return $this->getMethod() =='get'?true:false;
+    public function getMethod()
+    {
+        return strtolower($_SERVER['REQUEST_METHOD']);
     }
-    public function isPost(){
-        return $this->getMethod() =='post'?true:false;
+    public function isGet()
+    {
+        return $this->getMethod() == 'get' ? true : false;
     }
-    public function getBody (){
-        $body=[];
-        if($this->isGet()==true){
+    public function isPost()
+    {
+        return $this->getMethod() == 'post' ? true : false;
+    }
+    public function getBody()
+    {
+        $body = [];
+        if ($this->isGet() == true) {
             foreach ($_GET as $key => $value) {
-                if(is_array($value))
-                    $body[$key]=$value;
+                if (is_array($value))
+                    $body[$key] = $value;
                 else
-                $body[$key]=filter_input(INPUT_GET,$key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
-        if($this->isPost()){
+        if ($this->isPost()) {
             foreach ($_POST as $key => $value) {
-                if(is_array($value))
-                    $body[$key]=$value;
+                if (is_array($value))
+                    $body[$key] = $value;
                 else
-                    $body[$key]=filter_input(INPUT_POST ,$key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
         #
-        if(isset($_FILES)){
+        if (isset($_FILES)) {
             foreach ($_FILES as $key => $value) {
-                $body[$key]=$value;
+                $body[$key] = $value;
             }
         }
         #
         return $body;
     }
-    public function setRouteParams($params){
+    public function setRouteParams($params)
+    {
 
-        $this->routeParams=$params; 
-        return $this; 
+        $this->routeParams = $params;
+        return $this;
     }
-    public function getRouteParams(){
-        return $this->routeParams; 
+    public function getRouteParams()
+    {
+        return $this->routeParams;
     }
 
 }

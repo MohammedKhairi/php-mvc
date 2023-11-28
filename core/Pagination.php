@@ -11,11 +11,10 @@ class Pagination
      */
     public function __construct()
     {
-        $this->numPerPage =10;
+        $this->numPerPage =50;
         $this->limit_pages =3;
         $this->page =((isset($_GET['page']) && intval($_GET['page']) != 0)?$_GET['page']:1);
         $this->request =Application::$app->request;
-
     }
     /**
      * Summary of drawPager
@@ -49,37 +48,40 @@ class Pagination
         // if not on page 1, don't show back links
         if ($page > 1) {
             // show << link to go back to page 1
-            $pager .="<li class='page-item'> <a class='page-link' href='?page=1".$urls."'>First</a></li> ";
+            $pager .="<li class='page-item2'> <a class='page-link2' href='?page=1".$urls."'>First</a></li> ";
             // get previous page num
             $prevpage = $page - 1;
             // show < link to go back to 1 page
-            //$pager .="<li class='page-item'> <a class='page-link' href='?page=$prevpage'>Prev</a></li> ";
+            //$pager .="<li class='page-item2'> <a class='page-link2' href='?page=$prevpage'>Prev</a></li> ";
         } // end if 
+        if($pages >1)
+        {
+            // loop to show links to range of pages around current page
+            for ($x = ($page - $range); $x < (($page + $range) + 1); $x++) {
+                // if it's a valid page number...
+                if (($x > 0) && ($x <= $pages)) {
+                    // if we're on current page...
+                    if ($x == $page) {
+                        // 'highlight' it but don't make a link
+                        $pager .=" <li class='page-item2 active'><a class='page-link2 ' href='?page=$x$urls'>$x</a></li> ";
+                    // if not current page...
+                    } else {
+                        // make it a link
+                        $pager .="<li class='page-item2'><a class='page-link2' href='?page=$x$urls'>$x</a></li>";
+                    } // end else
+                } // end if 
+            } // end for
+        }
 
-        // loop to show links to range of pages around current page
-        for ($x = ($page - $range); $x < (($page + $range) + 1); $x++) {
-            // if it's a valid page number...
-            if (($x > 0) && ($x <= $pages)) {
-                // if we're on current page...
-                if ($x == $page) {
-                    // 'highlight' it but don't make a link
-                    $pager .=" <li class='page-item active'><a class='page-link ' href='?page=$x$urls'>$x</a></li> ";
-                // if not current page...
-                } else {
-                    // make it a link
-                    $pager .="<li class='page-item'><a class='page-link' href='?page=$x$urls'>$x</a></li>";
-                } // end else
-            } // end if 
-        } // end for
 
         // if not on last page, show forward and last page links        
         if ($page != $pages && $totalItems) {
             // get next page
             $nextpage = $page + 1;
                 // echo forward link for next page 
-            //$pager .="<li class='page-item'> <a class='page-link' href='?page=$nextpage'>Next</a></li> ";
+            //$pager .="<li class='page-item2'> <a class='page-link2' href='?page=$nextpage'>Next</a></li> ";
             // echo forward link for lastpage
-            $pager .="<li class='page-item'> <a class='page-link' href='?page=$pages$urls'>Last</a></li> ";
+            $pager .="<li class='page-item2'> <a class='page-link2' href='?page=$pages$urls'>Last</a></li> ";
         } // end if
         $pager .= "</ul>";
         /****** end build pagination links ******/

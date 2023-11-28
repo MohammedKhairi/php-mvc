@@ -4,22 +4,26 @@ namespace app\core;
 class Fun {
     public function OrderdArray($array , $k , $v):array
     {
-    // var_dump($array);exit;
         $arr=[];
-        foreach ($array as  $a) {
+        foreach ($array as  $a)
             $arr[$a[$k]] = $a[$v];
-        }
-        //var_dump($arr);exit;
+        //
         return $arr;
     }
     public function ArrayByKey($array ,$k):array
     {
-        // var_dump($array);exit;
             $arr=[];
-            foreach ($array as  $a) {
+            foreach ($array as  $a)
                 $arr[] = $a[$k];
-            }
-            //var_dump($arr);exit;
+            //
+            return $arr;
+    }
+    public function ArrayByValue($array):array
+    {
+            $arr=[];
+            foreach ($array as  $a)
+                $arr[$a] = $a;
+            //
             return $arr;
     }
     public function assets($v,$is_admin=false):string{
@@ -55,6 +59,43 @@ class Fun {
                 break;
         }
         return $val;
+    }
+    public function msg($v):string{
+        $translate=Application::$app->translate;
+        return $translate[$v]??'';
+    }
+    function rand_string( $length ) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return substr(str_shuffle($chars),0,$length);
+    
+    }
+    function getUTS( $time ,$type="date" ) {
+        if($type == 'time')
+            return Date("h:i:sa",$time);
+        elseif($type == 'date_time')
+            return Date("Y-m-d h:i:sa",$time);
+        else
+            return Date("Y-m-d",$time);
+    }
+    function getFullUTS( $time  ) {
+        return Date("Y-m-d\TH:i",$time);
+    }
+    function getTableLearning($time) {
+        $arr=[
+            "week"=>"اسبوعي",
+            "month"=>"شهري",
+            "final"=>"نهائي",
+        ];
+        return $arr[$time]??'';
+    }
+    function getLevel($l) {
+        $arr=[
+            "admin"=>"مدير النظام",
+            "editor"=>"محرر",
+            "employee"=>"موظف",
+            "student"=>"طالب",
+        ];
+        return $arr[$l]??'';
     }
 
 }

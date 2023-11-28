@@ -13,7 +13,7 @@ class UserController extends Controller{
         $UserModel=new Admin();
 
         return $this->reander('users',[
-                'title'=>'User Page',
+                'title'=>'صفحة الموظفين',
                 'data'=>$UserModel->get(),
             ]
         );
@@ -26,19 +26,19 @@ class UserController extends Controller{
             $UserModel->loadData($request->getBody());
 
             if($UserModel->validate() && $UserModel->insert() ){
-                Application::$app->session->setFlash('success','User Add Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
                 Application::$app->response->redirect('/cp/user');
                 exit; 
             }
             else
-                Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+                Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
 
         return $this->reander('user-set',[
                 'model'=>$UserModel,
                 'name'=>'add',
-                'title'=>'Add New User',
+                'title'=>'اضافة موظف جديد',
             ]
         );
     }
@@ -58,27 +58,26 @@ class UserController extends Controller{
                 $UserModel->update($id) 
             )
             {
-                Application::$app->session->setFlash('success','User Update Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('update'));
                 Application::$app->response->redirect('/cp/user');
                 exit; 
             }
              else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         #get Data
     
         if($id){
             $data=$UserModel->getOne($id);
-            $UserModel->username=$data['username'];
-            $UserModel->email=$data['email'];
+            $UserModel->code=$data['code'];
             $UserModel->img=$data['img'];
             $UserModel->lvl=$data['lvl'];
         }
         return $this->reander('user-set',[
                 'model'=>$UserModel,
                 'name'=>'update',
-                'title'=>'Edit User: '.$data['username']??'',
+                'title'=>'تعديل بيانات الموظف: '.$data['username']??'',
             ]
         );
     }
@@ -90,10 +89,10 @@ class UserController extends Controller{
             $UserModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $UserModel->remove($id) ){
-                Application::$app->session->setFlash('success','User Deleted Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('delete'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/user');
@@ -109,15 +108,47 @@ class UserController extends Controller{
             $UserModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $UserModel->restore($id) ){
-                Application::$app->session->setFlash('success','User Restore Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('restore'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/user');
         exit; 
 
 
+    }
+    public function profile(Request $request) {
+         
+        $UserModel=new Admin();
+        $data=[];
+
+        #Save Change
+        if($request->isPost())
+        {
+            $UserModel->loadData($request->getBody());
+            if(
+                $UserModel->profile(Application::$app->session->get('user')['id'])
+            )
+            {
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('update'));
+                Application::$app->response->redirect('/cp/user/profile');
+                exit; 
+            }
+             else
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
+
+        }
+        #get Data
+        $data=$UserModel->getOne(Application::$app->session->get('user')['id']);
+        $UserModel->code=$data['code'];
+        $UserModel->img=$data['img'];
+        return $this->reander('user-profile',[
+                'model'=>$UserModel,
+                'name'=>'profiel',
+                'title'=>'الملف الشخصي: '.$data['username']??'',
+            ]
+        );
     }
 }

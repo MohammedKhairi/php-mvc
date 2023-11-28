@@ -11,7 +11,7 @@ class PermisionActionController extends Controller{
     public function get() {
         $actionModel=new PermisionAction();
         return $this->reander('permission-actions',[
-                'title'=>'Permission Action Page',
+                'title'=>'صفحة العمليات',
                 'data'=>$actionModel->get(),
             ]
         );
@@ -24,19 +24,19 @@ class PermisionActionController extends Controller{
             $actionModel->loadData($request->getBody());
 
             if($actionModel->validate() && $actionModel->insert() ){
-                Application::$app->session->setFlash('success','Permission Action Add Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
                 Application::$app->response->redirect('/cp/permission/action');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
 
         return $this->reander('permission-actions-set',[
                 'model'=>$actionModel,
                 'name'=>'add',
-                'title'=>'Add New Permission Program',
+                'title'=>'اضافة عملية جديدة',
             ]
         );
     }
@@ -55,12 +55,12 @@ class PermisionActionController extends Controller{
                // $actionModel->validate() && 
                 $actionModel->update($id) )
             {
-                Application::$app->session->setFlash('success','Permission Action Update Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('update'));
                 Application::$app->response->redirect('/cp/permission/action');
                 exit; 
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         #get Data
@@ -73,7 +73,7 @@ class PermisionActionController extends Controller{
         return $this->reander('permission-actions-set',[
                 'model'=>$actionModel,
                 'name'=>'update',
-                'title'=>'Edit Permission Program: '.$data['name']??0,
+                'title'=>'تعديل بيانات العملية: '.$data['name']??0,
             ]
         );
     }
@@ -85,10 +85,10 @@ class PermisionActionController extends Controller{
             $actionModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $actionModel->remove($id) ){
-                Application::$app->session->setFlash('success','Permission Action Deleted Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('delete'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/permission/action');
@@ -104,10 +104,10 @@ class PermisionActionController extends Controller{
             $actionModel->loadData($request->getBody());
             $id=$request->getRouteParams()['id']??0;
             if($id && $actionModel->restore($id) ){
-                Application::$app->session->setFlash('success','Permission Action Restore Successfuly');
+                Application::$app->session->setFlash('success',Application::$app->fun->msg('restore'));
             }
             else
-            Application::$app->session->setFlash('error','Some Think Wrong ! Pless try Agin');
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
 
         }
         Application::$app->response->redirect('/cp/permission/action');
