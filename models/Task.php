@@ -51,8 +51,10 @@ class Task extends Model{
         ];
     }
     public function get(){
-        $this->isAllowed('`e`.`id`');
+        $this->setOrder();
+        #
         $_p=$this->Pagination();
+        #
         $D=Application::$app->db->query('SELECT `t`.`task`,
         `t`.`id` `tid`,
         `t`.`deleted`,
@@ -73,23 +75,25 @@ class Task extends Model{
         return $D;
     }
     public function getAll(){
-        $this->isAllowed('`emp_id`');
-        $D=Application::$app->db->query('SELECT `id`,
-        `emp_id`,
-        `grade_id`,
-        `task`,
-        `dars_id`,
-        `deliver_date`,
-        `is_comment`,
-        `deleted` 
-        FROM '.$this->dbTableName.' WHERE `deleted`=0'.$this->whr, $this->params);
+        $this->setOrder();
+        $D=Application::$app->db->query('SELECT `t`.`id`,
+        `t`.`emp_id`,
+        `t`.`grade_id`,
+        `t`.`task`,
+        `t`.`dars_id`,
+        `t`.`deliver_date`,
+        `t`.`is_comment`,
+        `t`.`deleted` 
+        FROM '.$this->dbTableName.' `t` WHERE `t`.`deleted`=0'.$this->whr, $this->params);
         return $D;
     }
     public function getOne($id){
 
-        $this->isAllowed('`t`.`emp_id`');
+        $this->setOrder();
+        #
+        $this->whr.=' AND `t`.`id`=? ';
         $this->params[]=$id;  
-
+        #
         $D=Application::$app->db->row('SELECT `t`.`task`,
         `t`.`id` `tid`,
         `t`.`deleted`,
@@ -106,10 +110,16 @@ class Task extends Model{
         inner join `dars` `m` on `t`.`dars_id` = `m`.`id` 
         inner join `grade` `g` on `t`.`grade_id` = `g`.`id` 
         inner join `employee` `e` on `t`.`emp_id` = `e`.`id` 
-        WHERE `t`.`deleted`=0 '.$this->whr.' and `t`.`id`=?  ',$this->params);
+        WHERE `t`.`deleted`=0 '.$this->whr,$this->params);
         return $D;
     }
     public function getOneInfo($id){
+        #
+        $this->setOrder();
+        #
+        $this->whr.=' AND `t`.`id`=? ';
+        $this->params[]=$id;  
+        #
         $D=Application::$app->db->row('SELECT `t`.`task`,
         `t`.`id` `tid`,
         `t`.`deleted`,
@@ -122,7 +132,7 @@ class Task extends Model{
         inner join `dars` `m` on `t`.`dars_id` = `m`.`id` 
         inner join `grade` `g` on `t`.`grade_id` = `g`.`id` 
         inner join `employee` `e` on `t`.`emp_id` = `e`.`id` 
-        WHERE `t`.`deleted`=0 and `t`.`id`=? ',[$id]);
+        WHERE `t`.`deleted`=0 '.$this->whr,$this->params);
         return $D;
     }
     public function insert(){
@@ -188,24 +198,25 @@ class Task extends Model{
         $this->setLog('task','restore',$id);
         return $last_id;
     }
-    public function isAllowed($key){  
+    public function setOrder(){  
         $user=Application::$app->session->get('user');
+        #
         $user_lvl=$user['lvl'];
         $user_uid=$user['user_id'];
         $user_id=$user['id'];
+        #
         if("employee"==$user_lvl){
-            $this->whr.=' and '.$key.'=? ';
+            $this->whr.=' and `t`.`emp_id`=? ';
             $this->params[]=$user_id;
         }
-        else if("student"==$user_lvl){
+        elseif("student"==$user_lvl){
             $StudentModel=new Student();
             $std=$StudentModel->getOneById($user_id);
             $this->whr.=' and `t`.`grade_id`=? ';
             $this->params[]=$std['grade_id'];
-            // if($std['division_id']){
-            //     $this->whr.=' and `td`.`division_id`=? ';
-            //     $this->params[]=$std['division_id'];  
-            // }
+            #
+
+            #
         }
         return true;
     }

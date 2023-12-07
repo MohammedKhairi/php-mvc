@@ -35,7 +35,7 @@
         <hr>
         <?php if($data['info']['is_comment'] == 1):?>
             <?php $form = app\core\form\Form::begin('', 'post');?>
-            <?php echo $form->TextareaField($model, 'message')->Rows(5) ?>
+            <?php echo $form->TextareaField($model, 'comment')->Rows(5) ?>
             <button type="submit" name="<?=$fname?>" class="btn btn-primary">ارسال</button>
             <?php echo app\core\form\Form::end(); ?> 
         <?php endif;?>
@@ -51,7 +51,7 @@
             <div class="mx-2">
                 <h5 class="text-primary"><?= $c['ename'].$c['sname']?></h5>
                 <small><?=Application::$app->fun->getUTS($c['mcreated'],'date_time')?></small>
-                <p><?= $c['message']?></p>
+                <p><?= $c['comment']?></p>
             </div>
         </div>
         <hr>

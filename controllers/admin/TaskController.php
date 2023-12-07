@@ -11,7 +11,7 @@ use app\models\Task;
 use app\models\TaskSolve;
 use app\models\Dars;
 use app\models\TaskDivision;
-use app\models\Message;
+use app\models\Comment;
 
 class TaskController extends Controller{ 
     public function get(Request $request) {
@@ -26,30 +26,35 @@ class TaskController extends Controller{
     public function show(Request $request) {
         
         $TaskModel=new Task();
-        $MessageModel=new Message();
+        $CommentModel=new Comment();
         $DivisionModel=new TaskDivision();
         $id=$request->getRouteParams()['id']??0;
         /**
          * Insert Comment
          */
-        $message=$request->getBody()['message']??'';
-        if(!empty($message))
+        $comment=$request->getBody()['comment']??'';
+        if(!empty($comment))
         {
-            if($MessageModel->insert($id , "task" ,$message) )
+            if($CommentModel->insert($id , "task" ,$comment) )
                 Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
             else
                 Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
-
         }
         //
+        $taskInfo=$TaskModel->getOneInfo($id);
+        if(empty($taskInfo)){
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
+            Application::$app->response->redirect('/cp/task');
+            exit; 
+        }
         return $this->reander('task-show',[
                 'title'=>'صفحة المهمة',
                 'fname'=>'add_comment',
-                'model'=>$MessageModel,
+                'model'=>$CommentModel,
                 'data'=>[
-                    "info"=>$TaskModel->getOneInfo($id),
+                    "info"=>$taskInfo,
                     "division"=>$DivisionModel->getAllByTask($id),
-                    "comments"=>$MessageModel->getByType("task",$id),
+                    "comments"=>$CommentModel->getByType("task",$id),
                 ],
             ]
         );
@@ -60,7 +65,7 @@ class TaskController extends Controller{
         $TaskSolveModel=new TaskSolve();
         $DivisionModel=new TaskDivision();
         $id=$request->getRouteParams()['id']??0;
-        //
+        #
         if($request->isPost())
         {
             $TaskSolveModel->loadData($request->getBody());
@@ -69,13 +74,20 @@ class TaskController extends Controller{
             else
                 Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
         }
-        //
+        #
+        $taskInfo=$TaskModel->getOneInfo($id);
+        if(empty($taskInfo)){
+            Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
+            Application::$app->response->redirect('/cp/task');
+            exit; 
+        }
+        #
         return $this->reander('task-solve',[
                 'title'=>'صفحة حل المهمة',
                 'fname'=>'solve',
                 'model'=>$TaskSolveModel,
                 'data'=>[
-                    "info"=>$TaskModel->getOneInfo($id),
+                    "info"=>$taskInfo,
                     "solve"=>$TaskSolveModel->getAllByTask($id),
                     "division"=>$DivisionModel->getAllByTask($id),
                 ],

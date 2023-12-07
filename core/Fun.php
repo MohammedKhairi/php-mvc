@@ -97,5 +97,21 @@ class Fun {
         ];
         return $arr[$l]??'';
     }
+    function getActionName($a) {
+        $arr=[
+            "add"=>"اضافه",
+            "edit"=>"تعديل",
+            "comment"=>"تعليق",
+        ];
+        return $arr[$a]??'';
+    }
+    function getProgramName($p) {
+        $arr=[
+            "alert"=>"تنبيه",
+            "task"=>"مهمة",
+            "news"=>"الاخبار",
+        ];
+        return $arr[$p]??'';
+    }
 
 }

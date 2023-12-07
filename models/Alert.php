@@ -44,11 +44,13 @@ class Alert extends Model{
         ];
     }
     public function get(){
-        $this->isAllowed('`a`.`emp_id`');
+        $this->sorte();
+        #
+        $_p=$this->Pagination();
+        #
         // vd($this->whr);
         // vd($this->params);
         // exit;
-        $_p=$this->Pagination();
         $D=Application::$app->db->query('SELECT `a`.`content`,
         `a`.`id` `aid`,
         `a`.`filename`,
@@ -67,26 +69,28 @@ class Alert extends Model{
         return $D;
     }
     public function getAll(){
-        $this->isAllowed('`emp_id`');
-        $D=Application::$app->db->query('SELECT `id`,
-        `emp_id`,
-        `grade_id`,
-        `content`,
-        `filename`,
-        `deleted` 
-        FROM '.$this->dbTableName.' WHERE `deleted`=0'.$this->whr,$this->params);
+        $this->sorte();
+        #
+        $D=Application::$app->db->query('SELECT `a`.`id`,
+        `a`.`emp_id`,
+        `a`.`grade_id`,
+        `a`.`content`,
+        `a`.`filename`,
+        `a`.`deleted` 
+        FROM '.$this->dbTableName.' WHERE `a`.`deleted`=0'.$this->whr,$this->params);
         return $D;
     }
     public function getOne($id){
-        $this->isAllowed('`emp_id`');
+        $this->sorte();
+        #
         $this->params[]=$id;    
-        $D=Application::$app->db->row('SELECT  `id`,
-        `emp_id`,
-        `grade_id`,
-        `content`,
-        `filename`,
-        `deleted` 
-        FROM '.$this->dbTableName.' WHERE `deleted`=0  '.$this->whr.' and `id`=?',$this->params);
+        $D=Application::$app->db->row('SELECT  `a`.`id`,
+        `a`.`emp_id`,
+        `a`.`grade_id`,
+        `a`.`content`,
+        `a`.`filename`,
+        `a`.`deleted` 
+        FROM '.$this->dbTableName.' `a` WHERE `a`.`deleted`=0  '.$this->whr.' and `a`.`id`=?',$this->params);
         return $D;
     }
     public function getOneInfo($id){
@@ -175,22 +179,18 @@ class Alert extends Model{
         $this->setLog('alert','edit',$id);
         return $last_id;
     }
-    public function isAllowed($key){  
+    public function sorte(){  
         $user=Application::$app->session->get('user');
-        $user_lvl=$user['lvl'];
-        // $user_uid=$user['user_id'];
-        $user_id=$user['id'];
-        if("employee"==$user_lvl){
-            $this->whr.=' and '.$key.'=? ';
-            $this->params[]=$user_id;
+        if("employee"==$user['lvl']){
+            $this->whr.=' and `a`.`emp_id`=? ';
+            $this->params[]=$user['id'];
         }
-        else if("student"==$user_lvl){
+        else if("student"==$user['lvl']){
             $StudentModel=new Student();
-            $std=$StudentModel->getOneById($user_id);
+            $std=$StudentModel->getOneById($user['user_id']);
             $this->whr.=' and `a`.`grade_id`=? ';
             $this->params[]=$std['grade_id'];
         }
-        return true;
     }
     public function isBelong($id){  
         if($this->getOne($id))

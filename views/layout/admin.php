@@ -13,7 +13,7 @@ $_user=$_session->get('user');
  */
 $_db=Application::$app->db;
 $LogModel=new Log();
-$_alert=$LogModel->getAlert($_user['lvl'],$_user['id']);
+$_alert=$LogModel->getAlert($_user['lvl'],$_user['id'],$_user['user_id']);
 
 /**
  * Slider Data
@@ -97,14 +97,10 @@ $slideLinks = [
     ],
     [
         "title" => "المراسلات",
-        "name" => "message",
-        "slag" => "/cp/message",
+        "name" => "chat",
+        "slag" => "/cp/chat",
         "permission"=>["admin","editor","student","employee"],
         "icon" => "icon-comment-o",
-        "sub" => [
-            ["title" => "استعراض", "slag" => ""],
-            ["title" => "اضافة", "slag" => "/add"],
-        ]
     ],
     [
         "title" => "الواجبات",
@@ -234,12 +230,12 @@ $slideLinks = [
                                     <?php if(!empty($_alert)):?>
                                         <div class="pulse-css"></div>
                                     <?php endif?>
-                                </a>
+                                </a> 
                                 <div class="dropdown-menu-c dropdown_menu_anm1 dropdown-menu-w">
                                     <!-- Admin -->
                                     <?php if("admin"==$_user['lvl'] || "student"==$_user['lvl']):?>
                                         <?php foreach ($_alert['data'] as $a):?>
-                                            <a href="/cp/alert/show/<?=$a['aid']?>" class="text-color">
+                                            <a href="/cp/<?=$a['program']?>/show/<?=$a['post_id']?>" class="text-color">
                                                 <div class="d-flex align-items-center p-2 border-bottom2">
                                                     <div class="col-4">
                                                         <div class="d-flex flex-column align-items-center">
@@ -248,17 +244,38 @@ $slideLinks = [
                                                         </div>
                                                     </div>
                                                     <div class="col-8">
-                                                        <p class="text-colum-2"><?=$a['acontent']?></p>
+                                                        <p class="text-colum-2">
+                                                            <?=$_fun->getProgramName($a['program'])?>
+                                                            -
+                                                            <?=$_fun->getActionName($a['action'])?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </a>
                                         <?php endforeach;?>
                                     <?php endif;?>
                                     <!-- Employee -->
-
+                                    <?php if("employee"==$_user['lvl']):?>
+                                        <?php foreach ($_alert['data'] as $a):?>
+                                            <a href="/cp/<?=$a['post_type']?>/show/<?=$a['post_id']?>" class="text-color">
+                                                <div class="d-flex align-items-center p-2 border-bottom2">
+                                                    <div class="col-4">
+                                                        <div class="d-flex flex-column align-items-center">
+                                                            <img class="w40 mh40 rounded-circle" src="<?=$_fun->uploads().$a['simg']?>">
+                                                            <small class="text-primary"><?=$a['sname']?></small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <p class="text-colum-2">
+                                                            <?=$_fun->getProgramName($a['post_type']).' / '.$a['comment']?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        <?php endforeach;?>
+                                    <?php endif;?>
                                     <!-- Student -->
                                 </div>
-
                             </li>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">

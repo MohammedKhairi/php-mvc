@@ -7,33 +7,33 @@ use app\core\Image;
 use app\core\Model;
 use app\core\Request;
 
-class Message extends Model{
+class Comment extends Model{
     public $user_id=0;
     public $post_id=0;
     public $post_type='';
-    public $message='';
+    public $comment='';
     /**
      * Database Table Info
      */
     public $dbTableName='comment';
 
-    private $dbColums=['user_id','post_id','post_type','message'];
+    private $dbColums=['user_id','post_id','post_type','comment'];
 
     public function rules():array
     {
         return[
-             'message'     =>[self::RULE_REQUIERD],
+             'comment'     =>[self::RULE_REQUIERD],
         ];
     }
     public function lables():array{
         return[
-             'message'     =>"اكتب التعليق",
+             'comment'     =>"اكتب التعليق",
         ];
     }
     public function getByType($type ,$id){
 
         $D=Application::$app->db->query('SELECT `m`.`id`,
-        `m`.`message`,
+        `m`.`comment`,
         `m`.`post_id`,
         `m`.`created` `mcreated`,
         `e`.`name` `ename`,
@@ -47,22 +47,22 @@ class Message extends Model{
         order by `m`.`id` desc',[$type ,$id]);
         return $D;
     }
-    public function insert($id ,$type,$message){
+    public function insert($id ,$type,$comment){
         $this->user_id=Application::$app->session->get('user')['user_id'];
         $last_id=Application::$app->db->insert($this->dbTableName,[
             'user_id'       =>$this->user_id,
             'post_id'       =>$id,
             'post_type'     =>$type,
-            'message'       =>$message,
+            'comment'       =>$comment,
             'created'        =>time(),
         ]);
-        $this->setLog('message','add',$last_id);
-
+        $this->setLog('comment','add',$last_id);
+        $this->setLog($type,'comment',$id);
         return $last_id;
     }
     public function remove($id , $type){
         $last_id=Application::$app->db->update($this->dbTableName,['deleted'=>time()],['id'=>$id,'post_type'=>$type]);
-        $this->setLog('message','remove',$id);
+        $this->setLog('comment','remove',$id);
         return $last_id;
     }
 

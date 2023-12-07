@@ -9,7 +9,7 @@ use app\models\Division;
 use app\models\Grade;
 use app\models\Alert;
 use app\models\AlertDivision;
-use app\models\Message;
+use app\models\Comment;
 
 
 class AlertController extends Controller{ 
@@ -108,16 +108,16 @@ class AlertController extends Controller{
     public function show(Request $request) {
         
         $AlertModel=new Alert();
-        $MessageModel=new Message();
+        $CommentModel=new Comment();
         $DivisionModel=new AlertDivision();
         $id=$request->getRouteParams()['id']??0;
         /**
          * Insert Comment
          */
-        $message=$request->getBody()['message']??'';
-        if(!empty($message))
+        $comment=$request->getBody()['comment']??'';
+        if(!empty($comment))
         {
-            if($MessageModel->insert($id , "alert" ,$message) )
+            if($CommentModel->insert($id , "alert" ,$comment) )
                 Application::$app->session->setFlash('success',Application::$app->fun->msg('add'));
             else
                 Application::$app->session->setFlash('error',Application::$app->fun->msg('error'));
@@ -127,11 +127,11 @@ class AlertController extends Controller{
         return $this->reander('alert-show',[
                 'title'=>'صفحة التبليغ',
                 'fname'=>'add_comment',
-                'model'=>$MessageModel,
+                'model'=>$CommentModel,
                 'data'=>[
                     "info"=>$AlertModel->getOneInfo($id),
                     "division"=>$DivisionModel->getAllByAlert($id),
-                    "comments"=>$MessageModel->getByType("alert",$id),
+                    "comments"=>$CommentModel->getByType("alert",$id),
                 ],
             ]
         );
