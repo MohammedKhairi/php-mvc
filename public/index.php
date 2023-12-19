@@ -33,7 +33,7 @@ use app\controllers\admin\ArticalController;
 use app\controllers\admin\StudentController;
 use app\controllers\admin\AlertController;
 use app\controllers\admin\TaskController;
-
+use app\controllers\admin\ChatController;
 
 
 use app\models\Grade;
@@ -101,9 +101,13 @@ function vd($v){
 
 #
 $app=new Application(dirname(__DIR__),$config);
+
+
 /**
  * ROUTER 
  */
+
+
 $app->router->req('',[SiteController::class,'home']);
 $app->router->req('/login',[AuthController::class,'login']);
 $app->router->req('/logout',[AuthController::class,'logout']);
@@ -112,7 +116,7 @@ $app->router->req('/logout',[AuthController::class,'logout']);
  */
 $app->router->req(cp().'/dashboard',[AdminController::class,'get']);
 /**
- * Category Pages
+ * User Pages
  */
 $app->router->req(cp().'/user',[UserController::class,'get'],'user.get');
 $app->router->req(cp().'/user/add' ,[UserController::class,'add'],'user.add');
@@ -120,6 +124,16 @@ $app->router->req(cp().'/user/edit/{id}',[UserController::class,'edit'],'user.ed
 $app->router->req(cp().'/user/delete/{id}',[UserController::class,'delete'],'user.delete');
 $app->router->req(cp().'/user/restore/{id}',[UserController::class,'restore'],'user.restore');
 $app->router->req(cp().'/user/profile',[UserController::class,'profile'],'user.profile');
+
+/**
+ * User Pages
+ */
+$app->router->req(cp().'/chat',[ChatController::class,'get'],'chat.get');
+$app->router->req(cp().'/chat/get-users',[ChatController::class,'getUsers'],'chat.get');
+$app->router->req(cp().'/chat/get',[ChatController::class,'getChats'],'chat.get');
+$app->router->req(cp().'/chat/add',[ChatController::class,'add'],'chat.add');
+
+
 /**
  * Employee Pages
  */

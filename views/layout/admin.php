@@ -432,6 +432,18 @@ $slideLinks = [
                     <!-- Put Content -->
                     {content}
                     <!-- End Put Content  -->
+
+                    <!--**********************************
+                        Footer start
+                    ***********************************-->
+                    <!-- <div class="footer my-4">
+                        <div class="copyright">
+                            <p>Copyright © Designed &amp; Developed by <a href="../index.htm" target="_blank"> Mohammed Khairi </a>2023</p>
+                        </div>
+                    </div> -->
+                    <!--**********************************
+                        Footer end
+                    ***********************************-->
                 </div>
             </div>
         </div>
@@ -439,17 +451,6 @@ $slideLinks = [
             Content body end
         ***********************************-->
 
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-                <p>Copyright © Designed &amp; Developed by <a href="../index.htm" target="_blank"> Mohammed Khairi </a>2023</p>
-            </div>
-        </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
 
     </div>
     <!--**********************************
